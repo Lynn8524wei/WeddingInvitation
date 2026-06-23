@@ -3164,8 +3164,8 @@
     z-index: 9999;
     display: grid;
     place-items: center;
-    background: #fffaf7;
-    color: #5f4036;
+    background: linear-gradient(160deg, #1a0a0a 0%, #2d1010 40%, #1a1a2e 100%);
+    color: #f5e6d0;
     transition: opacity .65s ease, visibility .65s ease;
   }
 
@@ -3178,8 +3178,8 @@
   }
 
   .site-loader__mark {
-    width: 96px;
-    height: 96px;
+    width: 160px;
+    height: 160px;
     display: block;
     object-fit: contain;
     filter: drop-shadow(0 10px 18px rgba(95, 64, 54, .16));
@@ -3195,14 +3195,14 @@
   .site-loader__text {
     margin: 0;
     font-size: 13px;
-    color: rgba(95, 64, 54, .72);
+    color: rgba(245, 230, 208, .78);
   }
 
   .site-loader__bar {
     width: 132px;
     height: 2px;
     overflow: hidden;
-    background: rgba(95, 64, 54, .14);
+    background: rgba(245, 230, 208, .2);
   }
 
   .site-loader__bar::before {
@@ -3210,7 +3210,7 @@
     display: block;
     width: 44%;
     height: 100%;
-    background: #b78373;
+    background: #d4a847;
     animation: loaderBar 1.15s ease-in-out infinite;
   }
 
@@ -3300,8 +3300,8 @@
 
     <!-- 2 · PHOTOS -->
     <section class="page">
-      <p class="page-eyebrow">Our Memories</p>
-      <p class="page-title-zh">我們的回憶</p>
+      <p class="page-eyebrow">Wedding Photos Sneak Peek</p>
+      <p class="page-title-zh">婚紗照搶先看</p>
 
       <div class="carousel-track" id="carouselTrack">
         <div class="photo-frame">
@@ -3320,12 +3320,17 @@
           <div class="photo-placeholder">📷</div>
           <div class="photo-label">婚紗照 4</div>
         </div>
+        <div class="photo-frame">
+          <div class="photo-placeholder">📷</div>
+          <div class="photo-label">期待你與我們一起創造新的回憶</div>
+        </div>
       </div>
       <div class="carousel-dots">
         <div class="dot active" data-idx="0"></div>
         <div class="dot" data-idx="1"></div>
         <div class="dot" data-idx="2"></div>
         <div class="dot" data-idx="3"></div>
+        <div class="dot" data-idx="4"></div>
       </div>
     </section>
 
