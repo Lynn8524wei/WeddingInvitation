@@ -2935,8 +2935,14 @@
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     padding: 0 21.5%;
+    cursor: grab;
   }
   .carousel-track::-webkit-scrollbar { display: none; }
+  .carousel-track.dragging {
+    cursor: grabbing;
+    scroll-snap-type: none;
+    user-select: none;
+  }
 
   .photo-frame {
     flex: 0 0 100%;
@@ -2975,6 +2981,7 @@
     width: 7px; height: 7px;
     border-radius: 50%;
     background: rgba(212,168,71,0.3);
+    cursor: pointer;
     transition: all 0.3s;
   }
   .dot.active { background: #d4a847; width: 20px; border-radius: 4px; }
@@ -3691,15 +3698,93 @@
   const track = document.getElementById('carouselTrack');
   const frames = Array.from(track.querySelectorAll('.photo-frame'));
   const dots = document.querySelectorAll('.carousel-dots .dot');
+  let isDraggingCarousel = false;
+  let carouselDragStartX = 0;
+  let carouselDragStartScroll = 0;
+  let carouselMoved = false;
+
+  function frameCenter(frame) {
+    return frame.offsetLeft - track.offsetLeft + frame.offsetWidth / 2;
+  }
+
+  function currentCarouselIndex() {
+    const trackCenter = track.scrollLeft + track.clientWidth / 2;
+    return frames.reduce((best, frame, i) => {
+      const distance = Math.abs(frameCenter(frame) - trackCenter);
+      return distance < best.distance ? { index: i, distance } : best;
+    }, { index: 0, distance: Infinity }).index;
+  }
+
+  function scrollCarouselTo(index, behavior = 'smooth') {
+    const frame = frames[Math.max(0, Math.min(index, frames.length - 1))];
+    const left = frame.offsetLeft - track.offsetLeft - (track.clientWidth - frame.offsetWidth) / 2;
+    track.scrollTo({ left, behavior });
+  }
 
   function updateCarousel() {
-    const step = frames[0].offsetWidth + 12;
-    const idx = Math.round(track.scrollLeft / step);
+    const idx = currentCarouselIndex();
     dots.forEach((d, i) => d.classList.toggle('active', i === idx));
     frames.forEach((f, i) => f.classList.toggle('dimmed', i !== idx));
   }
+
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      scrollCarouselTo(Number(dot.dataset.idx || 0));
+    });
+  });
+
+  frames.forEach((frame, i) => {
+    frame.addEventListener('click', () => {
+      if (carouselMoved) return;
+      scrollCarouselTo(i);
+    });
+  });
+
+  track.addEventListener('click', e => {
+    if (carouselMoved) return;
+    const clickedIndex = frames.findIndex(frame => {
+      const rect = frame.getBoundingClientRect();
+      return e.clientX >= rect.left && e.clientX <= rect.right &&
+        e.clientY >= rect.top && e.clientY <= rect.bottom;
+    });
+    if (clickedIndex >= 0) scrollCarouselTo(clickedIndex);
+  });
+
+  track.addEventListener('pointerdown', e => {
+    if (e.button !== 0) return;
+    isDraggingCarousel = true;
+    carouselMoved = false;
+    carouselDragStartX = e.clientX;
+    carouselDragStartScroll = track.scrollLeft;
+    track.classList.add('dragging');
+    track.setPointerCapture(e.pointerId);
+  });
+
+  track.addEventListener('pointermove', e => {
+    if (!isDraggingCarousel) return;
+    const dx = e.clientX - carouselDragStartX;
+    if (Math.abs(dx) > 4) carouselMoved = true;
+    track.scrollLeft = carouselDragStartScroll - dx;
+  });
+
+  function endCarouselDrag(e) {
+    if (!isDraggingCarousel) return;
+    isDraggingCarousel = false;
+    track.classList.remove('dragging');
+    if (track.hasPointerCapture(e.pointerId)) track.releasePointerCapture(e.pointerId);
+    scrollCarouselTo(currentCarouselIndex());
+    window.setTimeout(() => { carouselMoved = false; }, 0);
+  }
+
+  track.addEventListener('pointerup', endCarouselDrag);
+  track.addEventListener('pointercancel', endCarouselDrag);
+  track.addEventListener('mouseleave', e => {
+    if (isDraggingCarousel) endCarouselDrag(e);
+  });
+
   track.addEventListener('scroll', () => requestAnimationFrame(updateCarousel));
   window.addEventListener('load', updateCarousel);
+  window.addEventListener('resize', () => scrollCarouselTo(currentCarouselIndex(), 'auto'));
   updateCarousel();
 
   /* ── TRANSPORT TABS ── */
