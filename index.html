@@ -2737,6 +2737,7 @@
     color: #f5e6d0;
     overflow: hidden;
     position: relative;
+    width: 100%;
     max-width: 480px;
     margin: 0 auto;
   }
@@ -3151,6 +3152,189 @@
   @media (max-width: 420px) {
     .music-bar { top: max(10px, env(safe-area-inset-top)); right: 10px; padding: 7px 11px; font-size: 11px; }
     #musicLabel { max-width: 132px; }
+  }
+
+  @media (min-width: 768px) {
+    .inv-root {
+      max-width: min(100%, 840px);
+      box-shadow: 0 0 0 1px rgba(212,168,71,0.08), 0 24px 80px rgba(0,0,0,0.28);
+    }
+
+    .snow-canvas {
+      max-width: min(100%, 840px);
+    }
+
+    .page {
+      padding: 3.2rem clamp(3rem, 7vw, 5rem);
+    }
+
+    .page-title-zh {
+      font-size: 30px;
+      margin-bottom: 1.9rem;
+    }
+
+    .page-nav {
+      left: max(22px, calc(50% - 396px));
+    }
+
+    .hero-title {
+      font-size: 56px;
+    }
+
+    .hero-couple {
+      width: min(100%, 560px);
+      font-size: 20px;
+      gap: 16px;
+    }
+
+    .hero-message {
+      max-width: 620px;
+      font-size: 16px;
+      line-height: 2.05;
+    }
+
+    .divider {
+      max-width: 460px;
+    }
+
+    .carousel-track {
+      max-width: 760px;
+      gap: 16px;
+      padding: 0 25%;
+      margin: 0 auto;
+    }
+
+    .photo-frame {
+      flex-basis: min(58%, 390px);
+      height: min(58dvh, 520px);
+    }
+
+    .info-cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      align-items: stretch;
+      max-width: 760px;
+    }
+
+    .info-card {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 1.2rem 1rem;
+    }
+
+    .info-icon {
+      margin-top: 0;
+    }
+
+    .transport-tabs {
+      gap: 12px;
+      margin-bottom: 1.25rem;
+    }
+
+    .t-tab {
+      min-width: 112px;
+      padding: 9px 20px;
+      font-size: 14px;
+    }
+
+    .transport-content {
+      max-width: 720px;
+      padding: 1.4rem 1.6rem;
+    }
+
+    .transport-content p {
+      font-size: 15px;
+    }
+
+    .rsvp-sub {
+      max-width: 560px;
+      font-size: 15px;
+    }
+
+    .music-bar {
+      right: max(22px, calc(50% - 398px));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .inv-root {
+      max-width: min(100%, 1040px);
+    }
+
+    .snow-canvas {
+      max-width: min(100%, 1040px);
+    }
+
+    .page {
+      padding-inline: clamp(5rem, 9vw, 7.5rem);
+    }
+
+    .page-nav {
+      left: max(26px, calc(50% - 492px));
+    }
+
+    .hero-title {
+      font-size: 62px;
+    }
+
+    .hero-message {
+      max-width: 680px;
+    }
+
+    .carousel-track {
+      max-width: 900px;
+      padding: 0 28%;
+    }
+
+    .photo-frame {
+      flex-basis: 360px;
+      height: min(58dvh, 540px);
+    }
+
+    .info-cards {
+      max-width: 880px;
+      gap: 18px;
+    }
+
+    .transport-content {
+      max-width: 800px;
+    }
+
+    .music-bar {
+      right: max(26px, calc(50% - 494px));
+    }
+  }
+
+  @media (max-height: 700px) {
+    .page {
+      padding-top: 2.1rem;
+      padding-bottom: 2.1rem;
+    }
+
+    .hero-crest .flake {
+      width: 58px;
+      height: 58px;
+    }
+
+    .hero-subtitle,
+    .hero-names,
+    .hero-couple {
+      margin-bottom: 0.9rem;
+    }
+
+    .hero-title {
+      font-size: clamp(36px, 7vw, 52px);
+    }
+
+    .hero-message {
+      line-height: 1.75;
+      margin-bottom: 0.8rem;
+    }
+
+    .photo-frame {
+      height: min(50dvh, 390px);
+    }
   }
 </style>
 <style>
