@@ -1,0 +1,12 @@
+.vs/
+
+# OS and editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Local logs and temp files
+*.log
+*.tmp
+*.temp
