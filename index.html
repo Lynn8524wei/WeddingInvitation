@@ -3178,14 +3178,11 @@
   }
 
   .site-loader__mark {
-    width: 48px;
-    height: 48px;
-    border: 1px solid rgba(95, 64, 54, .28);
-    border-radius: 50%;
-    display: grid;
-    place-items: center;
-    font-size: 18px;
-    letter-spacing: 0;
+    width: 96px;
+    height: 96px;
+    display: block;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 18px rgba(95, 64, 54, .16));
     animation: loaderPulse 1.8s ease-in-out infinite;
   }
 
@@ -3237,9 +3234,9 @@
 <body class="is-loading">
 <div class="site-loader" aria-live="polite" aria-label="頁面載入中">
   <div class="site-loader__inner">
-    <div class="site-loader__mark" aria-hidden="true">W</div>
+    <img class="site-loader__mark" src="assets/dandan-invitation-delivery.gif" alt="" aria-hidden="true">
     <div class="site-loader__names">Wedding Invitation</div>
-    <p class="site-loader__text">喜帖準備中</p>
+    <p class="site-loader__text">蛋蛋正在送來你的喜帖</p>
     <div class="site-loader__bar" aria-hidden="true"></div>
   </div>
 </div>
@@ -3583,10 +3580,10 @@
       else window.addEventListener('load', resolve, { once: true });
     });
     const fonts = document.fonts ? document.fonts.ready.catch(() => {}) : Promise.resolve();
-    const minimum = new Promise(resolve => window.setTimeout(resolve, 450));
+    const minimum = new Promise(resolve => window.setTimeout(resolve, 5000));
 
     Promise.all([loaded, fonts, minimum]).then(ready);
-    window.setTimeout(ready, 3200);
+    window.setTimeout(ready, 7000);
   })();
 </script>
 </body></html>
