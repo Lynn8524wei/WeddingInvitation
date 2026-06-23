@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>婚禮喜帖 — 2026.12.25</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #111;
+    font-family: 'Noto Serif TC', serif;
+  }
+
+  .inv-root {
+    background: linear-gradient(160deg, #1a0a0a 0%, #2d1010 40%, #1a1a2e 100%);
+    min-height: 100vh;
+    color: #f5e6d0;
+    overflow-x: hidden;
+    position: relative;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .snow-canvas {
+    position: fixed;
+    top: 0; left: 50%; transform: translateX(-50%);
+    width: 100%; max-width: 480px; height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .content {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem 1.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 13px;
+    letter-spacing: 4px;
+    color: #c9966a;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: #d4a847;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-names {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: #f5e6d0;
+    margin-bottom: 1.5rem;
+    letter-spacing: 2px;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 1.2rem auto;
+    width: 80%;
+  }
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #d4a847, transparent);
+  }
+  .divider-icon { color: #d4a847; font-size: 16px; }
+
+  .hero-message {
+    font-size: 15px;
+    line-height: 1.9;
+    color: #e8d5b0;
+    max-width: 320px;
+    margin: 0 auto 2rem;
+  }
+
+  .scroll-hint {
+    font-size: 12px;
+    color: #c9966a;
+    letter-spacing: 2px;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:.4} 50%{opacity:1} }
+
+  /* ── TREES ── */
+  .hero-trees {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    width: 100%;
+    max-width: 400px;
+    padding: 0 0 1rem;
+    pointer-events: none;
+  }
+
+  .christmas-deco {
+    text-align: center;
+    font-size: 22px;
+    padding: 1rem;
+    opacity: 0.7;
+    letter-spacing: 8px;
+  }
+
+  /* ── PHOTO CAROUSEL ── */
+  .photo-carousel {
+    position: relative;
+    width: 100%;
+    padding: 2rem 1.5rem;
+    background: rgba(0,0,0,0.3);
+  }
+
+  .carousel-track {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 8px;
+  }
+  .carousel-track::-webkit-scrollbar { display: none; }
+
+  .photo-frame {
+    flex: 0 0 240px;
+    height: 300px;
+    scroll-snap-align: center;
+    border-radius: 12px;
+    border: 2px solid rgba(212,168,71,0.4);
+    overflow: hidden;
+    background: rgba(255,255,255,0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+    cursor: pointer;
+    position: relative;
+  }
+
+  /* ── 婚紗照：把 background-image 替換為你的圖片 URL ── */
+  .photo-frame.has-photo {
+    background-size: cover;
+    background-position: center;
+  }
+  /* 範例（取消注解並填入 URL）:
+  .photo-frame:nth-child(1) { background-image: url('photo1.jpg'); }
+  .photo-frame:nth-child(2) { background-image: url('photo2.jpg'); }
+  .photo-frame:nth-child(3) { background-image: url('photo3.jpg'); }
+  .photo-frame:nth-child(4) { background-image: url('photo4.jpg'); }
+  */
+
+  .photo-placeholder {
+    font-size: 48px;
+    opacity: 0.5;
+  }
+  .photo-label {
+    font-size: 12px;
+    color: #c9966a;
+    letter-spacing: 1px;
+  }
+
+  .carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 12px;
+  }
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(212,168,71,0.3);
+    transition: background 0.3s;
+  }
+  .dot.active { background: #d4a847; }
+
+  /* ── SECTIONS ── */
+  .section {
+    padding: 2.5rem 1.5rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: #d4a847;
+    text-align: center;
+    margin-bottom: 0.4rem;
+  }
+  .section-sub {
+    font-size: 12px;
+    color: #c9966a;
+    text-align: center;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 1.8rem;
+  }
+
+  /* ── INFO CARDS ── */
+  .info-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .info-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(212,168,71,0.25);
+    border-radius: 14px;
+    padding: 1.2rem 1.4rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .info-icon {
+    font-size: 24px;
+    color: #d4a847;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .info-label {
+    font-size: 11px;
+    color: #c9966a;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .info-value {
+    font-size: 16px;
+    color: #f5e6d0;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+  .info-sub {
+    font-size: 13px;
+    color: #c9966a;
+    margin-top: 4px;
+  }
+
+  .map-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(212,168,71,0.15);
+    border: 1px solid rgba(212,168,71,0.4);
+    border-radius: 20px;
+    padding: 6px 14px;
+    color: #d4a847;
+    font-size: 13px;
+    cursor: pointer;
+    margin-top: 8px;
+    text-decoration: none;
+    font-family: 'Noto Serif TC', serif;
+    transition: background 0.2s;
+  }
+  .map-btn:hover { background: rgba(212,168,71,0.25); }
+
+  /* ── TRANSPORT ── */
+  .transport-section {
+    padding: 0 1.5rem 2.5rem;
+  }
+  .transport-title {
+    font-size: 16px;
+    color: #d4a847;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  .transport-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1rem;
+    justify-content: center;
+  }
+  .t-tab {
+    padding: 7px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    cursor: pointer;
+    border: 1px solid rgba(212,168,71,0.3);
+    background: transparent;
+    color: #c9966a;
+    font-family: 'Noto Serif TC', serif;
+    transition: all 0.2s;
+  }
+  .t-tab.active {
+    background: rgba(212,168,71,0.2);
+    border-color: #d4a847;
+    color: #d4a847;
+  }
+  .transport-content {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(212,168,71,0.2);
+    border-radius: 12px;
+    padding: 1.2rem;
+    display: none;
+  }
+  .transport-content.active { display: block; }
+  .transport-content p {
+    font-size: 14px;
+    color: #e8d5b0;
+    line-height: 1.9;
+    margin-bottom: 8px;
+  }
+  .transport-content p:last-child { margin-bottom: 0; }
+  .tag {
+    display: inline-block;
+    background: rgba(212,168,71,0.15);
+    border: 1px solid rgba(212,168,71,0.3);
+    border-radius: 4px;
+    padding: 1px 8px;
+    font-size: 12px;
+    color: #d4a847;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+
+  /* ── RSVP ── */
+  .rsvp-section {
+    padding: 2rem 1.5rem 3rem;
+    text-align: center;
+    background: rgba(0,0,0,0.2);
+  }
+  .rsvp-icon { font-size: 40px; margin-bottom: 1rem; }
+  .rsvp-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    color: #d4a847;
+    margin-bottom: 0.5rem;
+  }
+  .rsvp-sub {
+    font-size: 14px;
+    color: #c9966a;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+  .rsvp-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #d4a847, #c9966a);
+    border: none;
+    border-radius: 28px;
+    padding: 14px 32px;
+    color: #1a0a0a;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Noto Serif TC', serif;
+    transition: transform 0.2s, opacity 0.2s;
+    text-decoration: none;
+  }
+  .rsvp-btn:hover { transform: scale(1.03); opacity: 0.9; }
+
+  /* ── FOOTER ── */
+  .footer {
+    padding: 2rem 1.5rem;
+    text-align: center;
+    border-top: 1px solid rgba(212,168,71,0.15);
+  }
+  .footer-date {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: #d4a847;
+    margin-bottom: 4px;
+  }
+  .footer-sub {
+    font-size: 12px;
+    color: #c9966a;
+    letter-spacing: 3px;
+    margin-top: 6px;
+  }
+
+  /* ── MUSIC BAR ── */
+  .music-bar {
+    position: fixed;
+    bottom: 20px;
+    right: 16px;
+    z-index: 100;
+    background: rgba(26,10,10,0.88);
+    border: 1px solid rgba(212,168,71,0.4);
+    border-radius: 24px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: #d4a847;
+    font-size: 12px;
+    font-family: 'Noto Serif TC', serif;
+    transition: background 0.2s;
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+  }
+  .music-bar:hover { background: rgba(50,20,20,0.92); }
+  .music-note { font-size: 16px; animation: sway 1.5s ease-in-out infinite; display: inline-block; }
+  @keyframes sway { 0%,100%{transform:rotate(-10deg)} 50%{transform:rotate(10deg)} }
+  .music-paused .music-note { animation: none; opacity: 0.5; }
+</style>
+</head>
+<body>
+
+<div class="inv-root">
+  <canvas class="snow-canvas" id="snowCanvas"></canvas>
+
+  <div class="content">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="christmas-deco">🎄 ✦ 🎄</div>
+
+      <div class="hero-trees" aria-hidden="true">
+        <svg width="90" height="130" viewBox="0 0 90 130" fill="none">
+          <polygon points="45,8 10,55 25,55 8,90 22,90 5,125 85,125 68,90 82,90 65,55 80,55" fill="#2d7a2d"/>
+          <polygon points="45,8 10,55 25,55 8,90 22,90 5,125 85,125 68,90 82,90 65,55 80,55" fill="none" stroke="#1a4d1a" stroke-width="1"/>
+          <rect x="37" y="125" width="16" height="8" fill="#8B4513"/>
+          <circle cx="45" cy="8" r="5" fill="#d4a847"/>
+          <circle cx="18" cy="62" r="3.5" fill="#c41e3a"/>
+          <circle cx="60" cy="70" r="3.5" fill="#d4a847"/>
+          <circle cx="35" cy="95" r="3.5" fill="#fffde7"/>
+          <circle cx="58" cy="100" r="3" fill="#c41e3a"/>
+          <circle cx="25" cy="78" r="3" fill="#d4a847"/>
+          <circle cx="70" cy="55" r="3" fill="#fffde7"/>
+          <circle cx="30" cy="110" r="3" fill="#d4a847"/>
+          <circle cx="62" cy="115" r="3" fill="#c41e3a"/>
+          <circle cx="45" cy="52" r="3" fill="#fffde7"/>
+        </svg>
+
+        <div style="flex:1; text-align:center; padding:0 0.5rem">
+          <p class="hero-subtitle">Wedding Invitation</p>
+          <h1 class="hero-title">我們結婚啦</h1>
+          <p class="hero-names">— Together Forever —</p>
+
+          <div class="divider">
+            <div class="divider-line"></div>
+            <span class="divider-icon">❧</span>
+            <div class="divider-line"></div>
+          </div>
+
+          <p class="hero-message">
+            謝謝你，在我們成長的路上一直陪伴著我們。<br><br>
+            此刻，我們即將踏上人生中最重要的旅程，<br>
+            誠摯地邀請你，見證這份幸福。
+          </p>
+
+          <div class="divider">
+            <div class="divider-line"></div>
+            <span class="divider-icon">✦</span>
+            <div class="divider-line"></div>
+          </div>
+
+          <p style="font-size:13px; color:#c9966a; letter-spacing:2px;">2026 . 12 . 25</p>
+
+          <div style="margin-top: 2.5rem;" class="scroll-hint">
+            ↓ 繼續滑動
+          </div>
+        </div>
+
+        <svg width="90" height="130" viewBox="0 0 90 130" fill="none">
+          <polygon points="45,8 10,55 25,55 8,90 22,90 5,125 85,125 68,90 82,90 65,55 80,55" fill="#2d7a2d"/>
+          <polygon points="45,8 10,55 25,55 8,90 22,90 5,125 85,125 68,90 82,90 65,55 80,55" fill="none" stroke="#1a4d1a" stroke-width="1"/>
+          <rect x="37" y="125" width="16" height="8" fill="#8B4513"/>
+          <circle cx="45" cy="8" r="5" fill="#d4a847"/>
+          <circle cx="22" cy="60" r="3.5" fill="#d4a847"/>
+          <circle cx="62" cy="72" r="3.5" fill="#c41e3a"/>
+          <circle cx="40" cy="98" r="3.5" fill="#d4a847"/>
+          <circle cx="55" cy="104" r="3" fill="#fffde7"/>
+          <circle cx="28" cy="80" r="3" fill="#c41e3a"/>
+          <circle cx="68" cy="57" r="3" fill="#d4a847"/>
+          <circle cx="33" cy="112" r="3" fill="#fffde7"/>
+          <circle cx="60" cy="118" r="3" fill="#d4a847"/>
+          <circle cx="47" cy="50" r="3" fill="#c41e3a"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- PHOTO CAROUSEL -->
+    <div class="photo-carousel">
+      <p style="font-size:12px;color:#c9966a;letter-spacing:2px;text-transform:uppercase;text-align:center;margin-bottom:1rem;">Our Memories</p>
+      <div class="carousel-track" id="carouselTrack">
+        <div class="photo-frame">
+          <div class="photo-placeholder">📷</div>
+          <div class="photo-label">婚紗照 1</div>
+        </div>
+        <div class="photo-frame">
+          <div class="photo-placeholder">📷</div>
+          <div class="photo-label">婚紗照 2</div>
+        </div>
+        <div class="photo-frame">
+          <div class="photo-placeholder">📷</div>
+          <div class="photo-label">婚紗照 3</div>
+        </div>
+        <div class="photo-frame">
+          <div class="photo-placeholder">📷</div>
+          <div class="photo-label">婚紗照 4</div>
+        </div>
+      </div>
+      <div class="carousel-dots">
+        <div class="dot active" data-idx="0"></div>
+        <div class="dot" data-idx="1"></div>
+        <div class="dot" data-idx="2"></div>
+        <div class="dot" data-idx="3"></div>
+      </div>
+    </div>
+
+    <!-- WEDDING INFO -->
+    <div class="section">
+      <p class="section-title">婚宴資訊</p>
+      <p class="section-sub">Wedding Details</p>
+
+      <div class="info-cards">
+        <div class="info-card">
+          <i class="ti ti-calendar-heart info-icon" aria-hidden="true"></i>
+          <div>
+            <p class="info-label">日期 Date</p>
+            <p class="info-value">2026 年 12 月 25 日</p>
+            <p class="info-sub">聖誕節 · 星期五</p>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <i class="ti ti-clock info-icon" aria-hidden="true"></i>
+          <div>
+            <p class="info-label">時間 Time</p>
+            <p class="info-value">晚上 18:00 入場</p>
+            <p class="info-sub">敬請準時蒞臨</p>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <i class="ti ti-map-pin info-icon" aria-hidden="true"></i>
+          <div>
+            <p class="info-label">地點 Venue</p>
+            <p class="info-value">GumGum 內科店</p>
+            <p class="info-sub">11492 臺北市內湖區基湖路 3 巷 68 號</p>
+            <a class="map-btn" href="https://maps.app.goo.gl/mWdTynvQohQZn1sg9" target="_blank">
+              <i class="ti ti-map-2" style="font-size:14px;" aria-hidden="true"></i>
+              在 Google Maps 開啟
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRANSPORT -->
+    <div class="transport-section">
+      <p class="transport-title"><i class="ti ti-route" aria-hidden="true"></i> 交通方式</p>
+      <div class="transport-tabs">
+        <button class="t-tab active" onclick="switchTab(this,'mrt')">
+          <i class="ti ti-train" aria-hidden="true"></i> 捷運
+        </button>
+        <button class="t-tab" onclick="switchTab(this,'bus')">
+          <i class="ti ti-bus" aria-hidden="true"></i> 公車
+        </button>
+        <button class="t-tab" onclick="switchTab(this,'car')">
+          <i class="ti ti-car" aria-hidden="true"></i> 開車
+        </button>
+      </div>
+
+      <div class="transport-content active" id="tab-mrt">
+        <p><span class="tag">文湖線</span>搭乘至 <strong style="color:#d4a847">港墘站</strong> 或 <strong style="color:#d4a847">內湖站</strong></p>
+        <p>出站後步行或搭乘計程車約 5–10 分鐘可抵達。</p>
+        <p style="font-size:12px; color:#c9966a;">💡 建議使用 Google Maps 導航至 GumGum 內科店</p>
+      </div>
+      <div class="transport-content" id="tab-bus">
+        <p>可搭乘路線：<span class="tag">21</span> <span class="tag">37</span> <span class="tag">247</span> <span class="tag">內科通勤專車</span></p>
+        <p>至 <strong style="color:#d4a847">基湖路口</strong> 站下車，步行約 3 分鐘。</p>
+        <p style="font-size:12px; color:#c9966a;">💡 平日交通尖峰，建議提早出發</p>
+      </div>
+      <div class="transport-content" id="tab-car">
+        <p>導航目的地：<strong style="color:#d4a847">基湖路 3 巷 68 號</strong></p>
+        <p>周邊停車場：內科一路、基湖路周邊皆有停車格。</p>
+        <p>💡 聖誕節當日停車位較緊俏，建議搭乘大眾運輸。</p>
+      </div>
+    </div>
+
+    <!-- RSVP -->
+    <div class="rsvp-section">
+      <div class="rsvp-icon">💌</div>
+      <h2 class="rsvp-title">出席回覆</h2>
+      <p class="rsvp-sub">
+        期待在婚禮現場與你相見 ✨<br>
+        請在 <strong style="color:#d4a847">12 月 10 日前</strong> 填寫出席表單<br>
+        讓我們為你準備最溫暖的席位
+      </p>
+      <!-- ★ 將下方 href="#" 替換為您的 Google Forms 連結 ★ -->
+      <a class="rsvp-btn" href="#" target="_blank">
+        <i class="ti ti-clipboard-check" style="font-size:18px;" aria-hidden="true"></i>
+        填寫出席表單
+      </a>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <div class="christmas-deco" style="font-size:18px; margin-bottom:1rem;">🎅 ✦ ⭐ ✦ 🎅</div>
+      <p class="footer-date">12.25.2026</p>
+      <p class="footer-sub">With Love · 期待與你共慶</p>
+      <div style="margin-top:1.5rem; font-size:22px; letter-spacing:12px; opacity:0.6; color:#d4a847;">❤</div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /inv-root -->
+
+<!-- MUSIC BAR -->
+<div class="music-bar" id="musicBar" onclick="toggleMusic()" role="button" aria-label="播放背景音樂">
+  <span class="music-note">♪</span>
+  <span id="musicLabel">Perfect · Ed Sheeran</span>
+</div>
+
+<script>
+  /* ── SNOW ── */
+  const canvas = document.getElementById('snowCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, flakes = [];
+
+  function resize() {
+    const root = document.querySelector('.inv-root');
+    W = canvas.width = root.offsetWidth;
+    H = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  for (let i = 0; i < 70; i++) {
+    flakes.push({
+      x: Math.random() * 500,
+      y: Math.random() * 1200,
+      r: Math.random() * 3 + 0.5,
+      d: Math.random() * 1 + 0.3,
+      dx: Math.random() * 0.5 - 0.25,
+      o: Math.random() * 0.6 + 0.2
+    });
+  }
+
+  function drawSnow() {
+    ctx.clearRect(0, 0, W, H);
+    flakes.forEach(f => {
+      ctx.beginPath();
+      ctx.arc(f.x % W, f.y % H, f.r, 0, Math.PI * 2);
+      ctx.globalAlpha = f.o;
+      ctx.fillStyle = '#fff';
+      ctx.fill();
+      f.y += f.d;
+      f.x += f.dx;
+      if (f.y > H) { f.y = -5; f.x = Math.random() * W; }
+    });
+    requestAnimationFrame(drawSnow);
+  }
+  drawSnow();
+
+  /* ── CAROUSEL ── */
+  const track = document.getElementById('carouselTrack');
+  const dots = document.querySelectorAll('.dot');
+  track.addEventListener('scroll', () => {
+    const idx = Math.round(track.scrollLeft / 252);
+    dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+  });
+
+  /* ── TRANSPORT TABS ── */
+  function switchTab(btn, id) {
+    document.querySelectorAll('.t-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.transport-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + id).classList.add('active');
+  }
+
+  /* ── MUSIC ── */
+  let musicPlaying = false;
+  const musicBar = document.getElementById('musicBar');
+  const musicLabel = document.getElementById('musicLabel');
+  let audio;
+
+  function toggleMusic() {
+    if (!audio) {
+      audio = new Audio();
+      audio.loop = true;
+      /* ★ 將下方 src 替換為 Perfect 的音樂檔案路徑或 URL ★ */
+      /* audio.src = 'perfect.mp3'; */
+    }
+    if (musicPlaying) {
+      audio.pause();
+      musicBar.classList.add('music-paused');
+      musicLabel.textContent = 'Perfect · 點擊播放';
+      musicPlaying = false;
+    } else {
+      const p = audio.play();
+      if (p !== undefined) {
+        p.then(() => {
+          musicBar.classList.remove('music-paused');
+          musicLabel.textContent = '音樂播放中 ♪';
+          musicPlaying = true;
+        }).catch(() => {
+          musicLabel.textContent = '請在裝置上播放 Perfect ♪';
+        });
+      }
+    }
+  }
+</script>
+
+</body>
+</html>
