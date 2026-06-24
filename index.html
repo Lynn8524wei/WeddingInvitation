@@ -3042,6 +3042,28 @@
     transition: background 0.2s;
   }
   .map-btn:hover { background: rgba(212,168,71,0.25); }
+  .parking-map-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    flex: 0 0 22px;
+    margin-left: 2px;
+    border: 1px solid rgba(212,168,71,0.45);
+    border-radius: 7px;
+    background: rgba(212,168,71,0.12);
+    color: #fff;
+    line-height: 1;
+    text-decoration: none;
+    vertical-align: middle;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .parking-map-btn:hover {
+    background: rgba(212,168,71,0.24);
+    border-color: rgba(212,168,71,0.75);
+  }
+  .parking-map-btn i { font-size: 14px; line-height: 1; }
 
   /* ── TRANSPORT ── */
   .transport-tabs {
@@ -3066,17 +3088,37 @@
     border-color: #d4a847;
     color: #d4a847;
   }
+  .transport-content-stage {
+    display: grid;
+    width: 100%;
+  }
   .transport-content {
-    display: none;
+    grid-area: 1 / 1;
     width: 100%;
     max-width: none;
     text-align: left;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.18s ease;
   }
-  .transport-content.active { display: block; }
+  .transport-content.active {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+  }
   .transport-content p {
     font-size: 13px; color: #e8d5b0; line-height: 1.65; margin-bottom: 6px;
   }
   .transport-content p:last-child { margin-bottom: 0; }
+  #tab-car p {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    line-height: 1.9;
+    margin-bottom: 12px;
+  }
+  #tab-car p:last-child { margin-bottom: 0; }
   .tag {
     display: inline-block;
     background: rgba(212,168,71,0.15);
@@ -3540,7 +3582,7 @@
         <div class="photo-frame has-photo" style="background-image: url('assets/wedding-photo-04.jpg')" aria-label="婚紗照 4"></div>
         <div class="photo-frame">
           <div class="photo-placeholder">📷</div>
-          <div class="photo-label">期待你與我們一起創造新的回憶</div>
+          <div class="photo-label">與我們一起創造新的回憶</div>
         </div>
       </div>
       <div class="carousel-dots">
@@ -3605,17 +3647,19 @@
               </button>
             </div>
 
-            <div class="transport-content active" id="tab-mrt">
-              <p><span class="tag">文湖線</span>搭乘至 <strong style="color:#d4a847">港墘站</strong> 或 <strong style="color:#d4a847">內湖站</strong></p>
-              <p>出站後步行或搭乘計程車約 5–10 分鐘可抵達。</p>
-            </div>
-            <div class="transport-content" id="tab-bus">
-              <p>可搭乘路線：<span class="tag">21</span> <span class="tag">37</span> <span class="tag">247</span> <span class="tag">內科通勤專車</span></p>
-              <p>至 <strong style="color:#d4a847">基湖路口</strong> 站下車，步行約 3 分鐘。</p>
-            </div>
-            <div class="transport-content" id="tab-car">
-              <p>導航目的地：<strong style="color:#d4a847">基湖路 3 巷 68 號</strong></p>
-              <p>周邊停車場：內科一路、基湖路周邊皆有停車格。</p>
+            <div class="transport-content-stage">
+              <div class="transport-content active" id="tab-mrt">
+                <p><span class="tag">文湖線</span>搭乘至 <strong style="color:#d4a847">西湖站</strong></p>
+                <p>出站後步行約 10 分鐘可抵達。</p>
+              </div>
+              <div class="transport-content" id="tab-bus">
+                <p>多班公車可以抵達</p>
+                <p>搭乘至 <strong style="color:#d4a847">基湖路口</strong> / <strong style="color:#d4a847">內湖基湖路口</strong> / <strong style="color:#d4a847">捷運西湖站</strong></p>
+              </div>
+              <div class="transport-content" id="tab-car">
+                <p><strong style="color:#d4a847">便利停車元吉站</strong> $25 / 0.5hr <a class="parking-map-btn" href="https://maps.app.goo.gl/4fbShTZkG579wBjn6" target="_blank" rel="noopener" aria-label="便利停車元吉站 Google Map"><i class="ti ti-map-2" aria-hidden="true"></i></a></p>
+                <p><strong style="color:#d4a847">瑞光大樓停車場</strong> $660 / 1hr <a class="parking-map-btn" href="https://maps.app.goo.gl/6od3s2twhUXuzu2n6" target="_blank" rel="noopener" aria-label="瑞光大樓停車場 Google Map"><i class="ti ti-map-2" aria-hidden="true"></i></a></p>
+              </div>
             </div>
           </div>
         </div>
