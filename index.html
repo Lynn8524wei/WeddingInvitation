@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-TW"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
@@ -2990,15 +2990,28 @@
   .info-cards {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 10px;
     width: 100%;
     max-width: 380px;
+  }
+  .transport-card {
+    align-items: flex-start;
+  }
+  .transport-card-body {
+    width: 100%;
+    min-width: 0;
+  }
+  .transport-heading {
+    color: #c9966a;
+    font-size: 11px;
+    letter-spacing: 2px;
+    margin-bottom: 0.7rem;
   }
   .info-card {
     background: rgba(255,255,255,0.06);
     border: 1px solid rgba(212,168,71,0.25);
     border-radius: 14px;
-    padding: 0.95rem 1.2rem;
+    padding: 0.82rem 1rem;
     display: flex;
     align-items: flex-start;
     gap: 13px;
@@ -3034,11 +3047,11 @@
   .transport-tabs {
     display: flex;
     gap: 8px;
-    margin-bottom: 1rem;
-    justify-content: center;
+    margin-bottom: 0.7rem;
+    justify-content: flex-start;
   }
   .t-tab {
-    padding: 7px 16px;
+    padding: 6px 12px;
     border-radius: 20px;
     font-size: 13px;
     cursor: pointer;
@@ -3054,18 +3067,14 @@
     color: #d4a847;
   }
   .transport-content {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(212,168,71,0.2);
-    border-radius: 12px;
-    padding: 1.2rem;
     display: none;
     width: 100%;
-    max-width: 380px;
+    max-width: none;
     text-align: left;
   }
   .transport-content.active { display: block; }
   .transport-content p {
-    font-size: 14px; color: #e8d5b0; line-height: 1.9; margin-bottom: 8px;
+    font-size: 13px; color: #e8d5b0; line-height: 1.65; margin-bottom: 6px;
   }
   .transport-content p:last-child { margin-bottom: 0; }
   .tag {
@@ -3177,7 +3186,7 @@
 
     .page-title-zh {
       font-size: 30px;
-      margin-bottom: 1.9rem;
+      margin-bottom: 1.45rem;
     }
 
     .page-nav {
@@ -3221,37 +3230,55 @@
       grid-template-columns: repeat(3, minmax(0, 1fr));
       align-items: stretch;
       max-width: 760px;
+      gap: 12px;
     }
+
 
     .info-card {
       flex-direction: column;
       align-items: center;
       text-align: center;
-      padding: 1.2rem 1rem;
+      padding: 1rem 0.85rem;
     }
 
     .info-icon {
       margin-top: 0;
     }
 
+    .info-card.transport-card {
+      grid-column: 1 / -1;
+      flex-direction: row;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .transport-card .info-icon {
+      margin-top: 2px;
+    }
+
+    .transport-heading {
+      font-size: 12px;
+      margin-bottom: 0.85rem;
+    }
+
     .transport-tabs {
       gap: 12px;
-      margin-bottom: 1.25rem;
+      margin-bottom: 0.95rem;
     }
 
     .t-tab {
-      min-width: 112px;
-      padding: 9px 20px;
+      min-width: 96px;
+      padding: 8px 18px;
       font-size: 14px;
     }
 
     .transport-content {
-      max-width: 720px;
-      padding: 1.4rem 1.6rem;
+      max-width: none;
+      padding: 0;
     }
 
     .transport-content p {
-      font-size: 15px;
+      font-size: 14px;
     }
 
     .rsvp-sub {
@@ -3305,7 +3332,7 @@
     }
 
     .transport-content {
-      max-width: 800px;
+      max-width: none;
     }
 
     .music-bar {
@@ -3332,6 +3359,19 @@
 
     .hero-title {
       font-size: clamp(36px, 7vw, 52px);
+    }
+
+    .info-card {
+      padding: 0.7rem 0.85rem;
+    }
+
+    .transport-content {
+      padding: 0;
+    }
+
+    .transport-content p {
+      line-height: 1.55;
+      margin-bottom: 5px;
     }
 
     .hero-message {
@@ -3426,7 +3466,7 @@
 <div class="site-loader" aria-live="polite" aria-label="頁面載入中">
   <div class="site-loader__inner">
     <img class="site-loader__mark" src="assets/dandan-invitation-delivery.gif" alt="" aria-hidden="true">
-    <div class="site-loader__names">Wedding Invitation</div>
+    <div class="site-loader__names">婚禮喜帖</div>
     <p class="site-loader__text">蛋蛋正在送來你的喜帖</p>
     <div class="site-loader__bar" aria-hidden="true"></div>
   </div>
@@ -3461,7 +3501,7 @@
         <svg class="flake" viewBox="-50 -50 100 100"><use href="#snowflake"></use></svg>
       </div>
 
-      <p class="hero-subtitle">Wedding Invitation</p>
+      <p class="hero-subtitle">婚禮喜帖</p>
       <p class="hero-names">2026.07.15</p>
       <h1 class="hero-title">我們結婚啦🎉</h1>
       <div class="hero-couple" aria-label="新郎新娘姓名"><span class="hero-couple-name">洪世彬 / Adam</span><span class="hero-couple-heart">♥️</span><span class="hero-couple-name">魏琳 / Lynn</span></div>
@@ -3491,7 +3531,6 @@
 
     <!-- 2 · PHOTOS -->
     <section class="page">
-      <p class="page-eyebrow">Wedding Photos Sneak Peek</p>
       <p class="page-title-zh">婚紗照搶先看</p>
 
       <div class="carousel-track" id="carouselTrack">
@@ -3515,23 +3554,22 @@
 
     <!-- 3 · WEDDING INFO -->
     <section class="page">
-      <p class="page-eyebrow">Wedding Details</p>
       <p class="page-title-zh">婚宴資訊</p>
 
       <div class="info-cards">
         <div class="info-card">
           <i class="ti ti-calendar-heart info-icon" aria-hidden="true"></i>
           <div>
-            <p class="info-label">日期 Date</p>
+            <p class="info-label">日期</p>
             <p class="info-value">2026 年 12 月 25 日</p>
-            <p class="info-sub">聖誕節 · 星期五</p>
+            <p class="info-sub">聖誕節 · 星期五· 行憲紀念日補假</p>
           </div>
         </div>
 
         <div class="info-card">
           <i class="ti ti-clock info-icon" aria-hidden="true"></i>
           <div>
-            <p class="info-label">時間 Time</p>
+            <p class="info-label">時間</p>
             <p class="info-value">晚上 18:00 入場</p>
             <p class="info-sub">敬請準時蒞臨</p>
           </div>
@@ -3540,7 +3578,7 @@
         <div class="info-card">
           <i class="ti ti-map-pin info-icon" aria-hidden="true"></i>
           <div>
-            <p class="info-label">地點 Venue</p>
+            <p class="info-label">地點</p>
             <p class="info-value">GumGum 內科店</p>
             <p class="info-sub">11492 臺北市內湖區基湖路 3 巷 68 號</p>
             <a class="map-btn" href="https://maps.app.goo.gl/mWdTynvQohQZn1sg9" target="_blank">
@@ -3549,43 +3587,40 @@
             </a>
           </div>
         </div>
+
+        <div class="info-card transport-card">
+          <i class="ti ti-route info-icon" aria-hidden="true"></i>
+          <div class="transport-card-body">
+            <p class="transport-heading">交通方式</p>
+
+            <div class="transport-tabs">
+              <button class="t-tab active" onclick="switchTab(this,'mrt')">
+                <i class="ti ti-train" aria-hidden="true"></i> 捷運
+              </button>
+              <button class="t-tab" onclick="switchTab(this,'bus')">
+                <i class="ti ti-bus" aria-hidden="true"></i> 公車
+              </button>
+              <button class="t-tab" onclick="switchTab(this,'car')">
+                <i class="ti ti-car" aria-hidden="true"></i> 開車
+              </button>
+            </div>
+
+            <div class="transport-content active" id="tab-mrt">
+              <p><span class="tag">文湖線</span>搭乘至 <strong style="color:#d4a847">港墘站</strong> 或 <strong style="color:#d4a847">內湖站</strong></p>
+              <p>出站後步行或搭乘計程車約 5–10 分鐘可抵達。</p>
+            </div>
+            <div class="transport-content" id="tab-bus">
+              <p>可搭乘路線：<span class="tag">21</span> <span class="tag">37</span> <span class="tag">247</span> <span class="tag">內科通勤專車</span></p>
+              <p>至 <strong style="color:#d4a847">基湖路口</strong> 站下車，步行約 3 分鐘。</p>
+            </div>
+            <div class="transport-content" id="tab-car">
+              <p>導航目的地：<strong style="color:#d4a847">基湖路 3 巷 68 號</strong></p>
+              <p>周邊停車場：內科一路、基湖路周邊皆有停車格。</p>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
-
-    <!-- 4 · TRANSPORT -->
-    <section class="page">
-      <p class="page-eyebrow">Getting Here</p>
-      <p class="page-title-zh">交通方式</p>
-
-      <div class="transport-tabs">
-        <button class="t-tab active" onclick="switchTab(this,'mrt')">
-          <i class="ti ti-train" aria-hidden="true"></i> 捷運
-        </button>
-        <button class="t-tab" onclick="switchTab(this,'bus')">
-          <i class="ti ti-bus" aria-hidden="true"></i> 公車
-        </button>
-        <button class="t-tab" onclick="switchTab(this,'car')">
-          <i class="ti ti-car" aria-hidden="true"></i> 開車
-        </button>
-      </div>
-
-      <div class="transport-content active" id="tab-mrt">
-        <p><span class="tag">文湖線</span>搭乘至 <strong style="color:#d4a847">港墘站</strong> 或 <strong style="color:#d4a847">內湖站</strong></p>
-        <p>出站後步行或搭乘計程車約 5–10 分鐘可抵達。</p>
-        <p style="font-size:12px; color:#c9966a;">建議使用 Google Maps 導航至 GumGum 內科店</p>
-      </div>
-      <div class="transport-content" id="tab-bus">
-        <p>可搭乘路線：<span class="tag">21</span> <span class="tag">37</span> <span class="tag">247</span> <span class="tag">內科通勤專車</span></p>
-        <p>至 <strong style="color:#d4a847">基湖路口</strong> 站下車，步行約 3 分鐘。</p>
-        <p style="font-size:12px; color:#c9966a;">平日交通尖峰，建議提早出發</p>
-      </div>
-      <div class="transport-content" id="tab-car">
-        <p>導航目的地：<strong style="color:#d4a847">基湖路 3 巷 68 號</strong></p>
-        <p>周邊停車場：內科一路、基湖路周邊皆有停車格。</p>
-        <p style="font-size:12px; color:#c9966a;">聖誕節當日停車位較緊俏，建議搭乘大眾運輸。</p>
-      </div>
-    </section>
-
     <!-- 5 · RSVP -->
     <section class="page">
       <div class="rsvp-icon"><i class="ti ti-mail-heart" aria-hidden="true"></i></div>
@@ -3612,7 +3647,7 @@
         <svg class="flake" viewBox="-50 -50 100 100"><use href="#snowflake"></use></svg>
       </div>
       <p class="footer-date">12.25.2026</p>
-      <p class="footer-sub">With Love · 期待與你共慶</p>
+      <p class="footer-sub">期待與你共慶</p>
       <div style="margin-top:1.6rem; font-size:22px; letter-spacing:12px; opacity:0.6; color:#d4a847;">❤</div>
     </section>
 
