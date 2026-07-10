@@ -2724,15 +2724,19 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
+  :root {
+    --invitation-background: linear-gradient(160deg, #1a0a0a 0%, #2d1010 40%, #1a1a2e 100%);
+  }
+
   html, body { height: 100%; }
   body {
-    background: #111;
+    background: var(--invitation-background);
     font-family: 'Noto Serif TC', serif;
     overflow: hidden;
   }
 
   .inv-root {
-    background: linear-gradient(160deg, #1a0a0a 0%, #2d1010 40%, #1a1a2e 100%);
+    background: transparent;
     height: 100dvh;
     color: #f5e6d0;
     overflow: hidden;
@@ -3127,48 +3131,69 @@
     margin-bottom: 4px;
   }
   .footer-sub { font-size: 12px; color: #c9966a; letter-spacing: 3px; margin-top: 8px; }
+  .countdown { margin-top: 1.7rem; text-align: center; }
+  .countdown-label { font-size: 11px; color: #c9966a; letter-spacing: 3px; margin-bottom: 7px; }
+  .countdown-time {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 8px;
+    color: #d4a847;
+    font-family: 'Playfair Display', 'Noto Serif TC', serif;
+  }
+  .countdown-unit { display: inline-flex; align-items: baseline; gap: 2px; }
+  .countdown-number { min-width: 2ch; font-size: 24px; font-variant-numeric: tabular-nums; }
+  .countdown-unit-label, .countdown-separator { font-size: 12px; color: #c9966a; }
 
   /* ── MUSIC BAR ── */
-.music-bar {
+  .music-toggle {
     position: fixed;
     top: max(14px, env(safe-area-inset-top));
-    right: max(14px, calc(50% - 224px));
+    right: 14px;
     z-index: 100;
-    max-width: calc(100vw - 28px);
-    box-sizing: border-box;
-    background: rgba(26,10,10,0.82);
-    border: 1px solid rgba(212,168,71,0.42);
-    border-radius: 24px;
-    padding: 8px 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    padding: 0;
     color: #d4a847;
-    font-size: 12px;
-    font-family: 'Noto Serif TC', serif;
-    transition: background 0.2s;
+    background: rgba(45, 16, 16, 0.82);
+    border: 1px solid rgba(212, 168, 71, 0.52);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 19px;
+    line-height: 1;
+    box-shadow: 0 5px 16px rgba(0, 0, 0, 0.18);
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
     -webkit-backdrop-filter: blur(6px);
     backdrop-filter: blur(6px);
   }
-  .music-bar:hover { background: rgba(50,20,20,0.9); }
-  .music-note { font-size: 16px; animation: sway 1.5s ease-in-out infinite; display: inline-block; }
-  #musicLabel { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  @keyframes sway { 0%,100%{transform:rotate(-10deg)} 50%{transform:rotate(10deg)} }
-  .music-paused .music-note { animation: none; opacity: 0.5; }
+  .music-toggle:hover { background: rgba(64, 23, 23, 0.94); transform: scale(1.06); }
+  .music-toggle:focus-visible { outline: 2px solid #f4d67f; outline-offset: 3px; }
+  .music-toggle.is-muted { color: rgba(201, 150, 106, 0.7); background: rgba(26, 10, 10, 0.78); border-color: rgba(201, 150, 106, 0.36); }
+  .music-toggle .music-on, .music-toggle .music-off { grid-area: 1 / 1; }
+  .music-toggle .music-off { display: none; }
+  .music-toggle.is-muted .music-on { display: none; }
+  .music-toggle.is-muted .music-off { display: block; }
   @media (max-width: 420px) {
-    .music-bar { top: max(10px, env(safe-area-inset-top)); right: 10px; padding: 7px 11px; font-size: 11px; }
-    #musicLabel { max-width: 132px; }
+    .music-toggle { top: max(10px, env(safe-area-inset-top)); right: 10px; width: 40px; height: 40px; }
+  }
+
+  @media (min-width: 481px) and (max-width: 767px) {
+    .music-toggle { right: calc(50% - 226px); }
   }
 
   @media (min-width: 768px) {
     .inv-root {
       max-width: min(100%, 840px);
-      box-shadow: 0 0 0 1px rgba(212,168,71,0.08), 0 24px 80px rgba(0,0,0,0.28);
     }
 
     .snow-canvas {
       max-width: min(100%, 840px);
+    }
+
+    .music-toggle {
+      right: max(22px, calc(50% - 398px));
     }
 
     .page {
@@ -3259,9 +3284,6 @@
       font-size: 15px;
     }
 
-    .music-bar {
-      right: max(22px, calc(50% - 398px));
-    }
   }
 
   @media (min-width: 1024px) {
@@ -3271,6 +3293,10 @@
 
     .snow-canvas {
       max-width: min(100%, 1040px);
+    }
+
+    .music-toggle {
+      right: max(26px, calc(50% - 494px));
     }
 
     .page {
@@ -3308,9 +3334,6 @@
       max-width: 800px;
     }
 
-    .music-bar {
-      right: max(26px, calc(50% - 494px));
-    }
   }
 
   @media (max-height: 700px) {
@@ -3355,7 +3378,7 @@
     z-index: 9999;
     display: grid;
     place-items: center;
-    background: linear-gradient(160deg, #1a0a0a 0%, #2d1010 40%, #1a1a2e 100%);
+    background: var(--invitation-background);
     color: #f5e6d0;
     transition: opacity .65s ease, visibility .65s ease;
   }
@@ -3478,7 +3501,7 @@
         誠摯地邀請你，見證這份幸福。
       </p>
 
-      <p class="hero-date">2026 . 12 . 25</p>
+      <p class="hero-date">2026 . 12 . 25 與你相見</p>
 
       <div class="hero-flakes" aria-hidden="true">
         <svg class="flake" viewBox="-50 -50 100 100"><use href="#snowflake"></use></svg>
@@ -3613,7 +3636,16 @@
       </div>
       <p class="footer-date">12.25.2026</p>
       <p class="footer-sub">With Love · 期待與你共慶</p>
-      <div style="margin-top:1.6rem; font-size:22px; letter-spacing:12px; opacity:0.6; color:#d4a847;">❤</div>
+      <div class="countdown" aria-label="距離婚禮倒數">
+        <p class="countdown-label">距離婚禮</p>
+        <p class="countdown-time" id="weddingCountdown" role="timer" aria-live="polite">
+          <span class="countdown-unit"><span class="countdown-number" id="countdownDays">0</span><span class="countdown-unit-label">日</span></span>
+          <span class="countdown-separator" aria-hidden="true">:</span>
+          <span class="countdown-unit"><span class="countdown-number" id="countdownHours">00</span><span class="countdown-unit-label">時</span></span>
+          <span class="countdown-separator" aria-hidden="true">:</span>
+          <span class="countdown-unit"><span class="countdown-number" id="countdownMinutes">00</span><span class="countdown-unit-label">分</span></span>
+        </p>
+      </div>
     </section>
 
   </div><!-- /pager -->
@@ -3622,11 +3654,12 @@
 <!-- LEFT PAGE NAV -->
 <div class="page-nav" id="pageNav" aria-hidden="true"></div>
 
-<!-- MUSIC BAR -->
-<div class="music-bar" id="musicBar" onclick="toggleMusic()" role="button" aria-label="播放背景音樂">
-  <span class="music-note">♪</span>
-  <span id="musicLabel">Perfect · Ed Sheeran</span>
-</div>
+<!-- BACKGROUND MUSIC -->
+<audio id="backgroundMusic" src="assets/wedding-background-music.mp3" loop preload="auto"></audio>
+<button class="music-toggle" id="musicToggle" type="button" aria-label="Turn off background music" aria-pressed="true">
+  <span class="music-on" aria-hidden="true">&#128266;&#65038;</span>
+  <span class="music-off" aria-hidden="true">&#128263;&#65038;</span>
+</button>
 
 <script>
   /* ── SNOW ── */
@@ -3795,37 +3828,57 @@
     document.getElementById('tab-' + id).classList.add('active');
   }
 
-  /* ── MUSIC ── */
-  let musicPlaying = false;
-  const musicBar = document.getElementById('musicBar');
-  const musicLabel = document.getElementById('musicLabel');
-  let audio;
+  /* ── WEDDING COUNTDOWN ── */
+  const weddingTime = new Date('2026-12-25T18:00:00+08:00').getTime();
+  const countdownDays = document.getElementById('countdownDays');
+  const countdownHours = document.getElementById('countdownHours');
+  const countdownMinutes = document.getElementById('countdownMinutes');
+  const weddingCountdown = document.getElementById('weddingCountdown');
 
-  function toggleMusic() {
-    if (!audio) {
-      audio = new Audio();
-      audio.loop = true;
-      /* ★ 將下方 src 替換為 Perfect 的音樂檔案路徑或 URL ★ */
-      /* audio.src = 'perfect.mp3'; */
-    }
-    if (musicPlaying) {
-      audio.pause();
-      musicBar.classList.add('music-paused');
-      musicLabel.textContent = 'Perfect · 點擊播放';
-      musicPlaying = false;
-    } else {
-      const p = audio.play();
-      if (p !== undefined) {
-        p.then(() => {
-          musicBar.classList.remove('music-paused');
-          musicLabel.textContent = '音樂播放中 ♪';
-          musicPlaying = true;
-        }).catch(() => {
-          musicLabel.textContent = '請在裝置上播放 Perfect ♪';
-        });
-      }
-    }
+  function updateCountdown() {
+    const remaining = Math.max(0, weddingTime - Date.now());
+    const totalMinutes = Math.floor(remaining / 60000);
+    const days = Math.floor(totalMinutes / 1440);
+    const hours = Math.floor((totalMinutes % 1440) / 60);
+    const minutes = totalMinutes % 60;
+
+    countdownDays.textContent = String(days);
+    countdownHours.textContent = String(hours).padStart(2, '0');
+    countdownMinutes.textContent = String(minutes).padStart(2, '0');
+    if (remaining === 0) weddingCountdown.setAttribute('aria-label', '婚禮時間已到');
   }
+
+  updateCountdown();
+  window.setInterval(updateCountdown, 60000);
+
+  /* BACKGROUND MUSIC */
+  const backgroundMusic = document.getElementById('backgroundMusic');
+  const musicToggle = document.getElementById('musicToggle');
+  let musicEnabled = true;
+
+  function updateMusicToggle() {
+    musicToggle.classList.toggle('is-muted', !musicEnabled);
+    musicToggle.setAttribute('aria-pressed', String(musicEnabled));
+    musicToggle.setAttribute('aria-label', musicEnabled ? 'Turn off background music' : 'Turn on background music');
+  }
+
+  function playBackgroundMusic() {
+    return backgroundMusic.play().catch(() => {
+      // Browsers can require one user gesture before allowing audio playback.
+    });
+  }
+
+  musicToggle.addEventListener('click', () => {
+    musicEnabled = !musicEnabled;
+    if (musicEnabled) playBackgroundMusic();
+    else backgroundMusic.pause();
+    updateMusicToggle();
+  });
+
+  updateMusicToggle();
+  window.addEventListener('invitationready', () => {
+    if (musicEnabled) playBackgroundMusic();
+  }, { once: true });
 </script>
 
 
@@ -3834,7 +3887,10 @@
   (() => {
     const ready = () => {
       document.body.classList.add('is-ready');
-      window.setTimeout(() => document.body.classList.remove('is-loading'), 700);
+      window.setTimeout(() => {
+        document.body.classList.remove('is-loading');
+        window.dispatchEvent(new Event('invitationready'));
+      }, 700);
     };
 
     const loaded = new Promise(resolve => {
