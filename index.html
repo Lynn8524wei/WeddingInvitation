@@ -3020,11 +3020,26 @@
   }
 
   /* ── FIXED ACCUMULATING SNOW (pages 2–5) ── */
+  .snowman-decoration {
+    --snowman-visibility: 0;
+    position: fixed;
+    right: max(10px, calc(50% - 230px));
+    bottom: -12px;
+    z-index: 49;
+    width: 112px;
+    height: auto;
+    opacity: var(--snowman-visibility);
+    pointer-events: none;
+    user-select: none;
+    transform: translateZ(0);
+    transition: opacity .25s linear;
+  }
+
   .snow-accumulation {
     --snow-height: 0px;
     --snow-crest-scale: 0;
     --snow-visibility: 0;
-    --snow-top-color: rgba(206,216,221,.82);
+    --snow-top-color: rgb(206,216,221);
     position: fixed;
     left: 50%;
     bottom: 0;
@@ -3036,7 +3051,7 @@
     opacity: 0;
     color: var(--snow-top-color);
     background:
-      linear-gradient(180deg, var(--snow-top-color) 0%, rgba(193,204,210,.8) 58%, rgba(174,190,199,.76) 100%);
+      linear-gradient(180deg, var(--snow-top-color) 0%, rgb(193,204,210) 58%, rgb(174,190,199) 100%);
     box-shadow: none;
     transform: translateX(-50%);
     transition: opacity .25s linear;
@@ -3070,6 +3085,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .snowman-decoration,
     .snow-accumulation { transition: none; }
   }
   .polaroid-caption {
@@ -3433,6 +3449,10 @@
       max-width: min(100%, 840px);
     }
 
+    .snowman-decoration {
+      right: max(18px, calc(50% - 402px));
+    }
+
     .music-toggle {
       right: max(22px, calc(50% - 398px));
     }
@@ -3552,6 +3572,10 @@
     .snow-canvas,
     .snow-accumulation {
       max-width: min(100%, 1040px);
+    }
+
+    .snowman-decoration {
+      right: max(20px, calc(50% - 500px));
     }
 
     .music-toggle {
@@ -3745,6 +3769,7 @@
 
 <div class="inv-root">
   <canvas class="snow-canvas" id="snowCanvas"></canvas>
+  <img class="snowman-decoration" id="snowmanDecoration" src="assets/snowman.png" alt="" aria-hidden="true" draggable="false">
   <div class="snow-accumulation" id="snowAccumulation" aria-hidden="true">
     <svg class="snow-crest" viewBox="0 0 1000 18" preserveAspectRatio="none" focusable="false">
       <path fill="currentColor" d="M0 13 C70 8 125 15 195 11 C275 6 345 16 425 12 C505 8 575 15 655 10 C735 6 805 15 880 11 C930 8 970 11 1000 8 L1000 18 L0 18 Z"></path>
@@ -4056,8 +4081,10 @@
 
   /* ── ACCUMULATING SNOW (0.5 cm per minute, safely capped below content) ── */
   let snowStartedAt = null;
+  const snowBaseHeight = 8;
   const snowGrowthPxPerMs = (96 / 2.54 * 0.5) / 60000;
   const snowBank = document.getElementById('snowAccumulation');
+  const snowman = document.getElementById('snowmanDecoration');
   let snowMaxHeight = 0;
 
   function visibleContentBottom(page) {
@@ -4086,11 +4113,12 @@
   function updateSnowAccumulation() {
     const elapsed = snowStartedAt === null ? 0 : Date.now() - snowStartedAt;
     const grownHeight = elapsed * snowGrowthPxPerMs;
-    const height = Math.min(grownHeight, snowMaxHeight);
+    const height = Math.min(snowBaseHeight + grownHeight, snowMaxHeight);
     const pageVisibility = Math.max(0, Math.min(1, pager.scrollTop / (pager.clientHeight * 0.35)));
     snowBank.style.setProperty('--snow-height', height.toFixed(2) + 'px');
     snowBank.style.setProperty('--snow-crest-scale', Math.min(1, height / 10).toFixed(3));
     snowBank.style.setProperty('--snow-visibility', pageVisibility.toFixed(3));
+    snowman.style.setProperty('--snowman-visibility', pageVisibility.toFixed(3));
     snowBank.classList.toggle('has-snow', height > 0.02);
     requestAnimationFrame(updateSnowAccumulation);
   }
