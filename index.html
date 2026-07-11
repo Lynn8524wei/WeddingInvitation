@@ -2850,9 +2850,9 @@
     letter-spacing: 2px;
   }
 .hero-couple {
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     align-items: center;
-    justify-content: center;
     gap: 10px;
     width: min(100%, 380px);
     margin: 0 auto 1.5rem;
@@ -2863,8 +2863,10 @@
     letter-spacing: 0;
     white-space: nowrap;
   }
-  .hero-couple-name { flex: 0 1 auto; min-width: 0; }
-  .hero-couple-heart { flex: 0 0 auto; color: #d4a847; font-size: 0.95em; }
+  .hero-couple-name { min-width: 0; }
+  .hero-couple-name:first-child { text-align: right; }
+  .hero-couple-name:last-child { text-align: left; }
+  .hero-couple-heart { color: #d4a847; font-size: 0.95em; justify-self: center; }
 
   .divider {
     display: flex;
@@ -2929,6 +2931,33 @@
   }
   @keyframes pulse { 0%,100%{opacity:.35} 50%{opacity:1} }
 
+  /* ── OPTION A: HERO STRING LIGHTS ── */
+  .hero-lights {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 88px;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .hero-light-wires { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .hero-light-wires path { fill: none; stroke: rgba(212,168,71,0.38); stroke-width: .55; vector-effect: non-scaling-stroke; }
+  .light-strand { position: absolute; inset: 0; }
+  .hero-light {
+    position: absolute;
+    left: var(--bulb-x);
+    top: var(--bulb-y);
+    width: 9px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--bulb-color);
+    box-shadow: 0 0 8px var(--bulb-color);
+    transform: translate(-50%, -2px) rotate(var(--bulb-rotate, 0deg));
+    animation: twinkle 2.4s ease-in-out var(--bulb-delay) infinite;
+  }
+  @keyframes twinkle { 0%,100%{opacity:1} 50%{opacity:.3} }
+
   /* ── PHOTO CAROUSEL (one centred, neighbours peeking) ── */
   .carousel-track {
     display: flex;
@@ -2938,8 +2967,14 @@
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    padding: 0 21.5%;
+    padding: 14px max(14%, calc((100% - clamp(230px, 68vw, 280px)) / 2));
     cursor: grab;
+  }
+  .photos-page .page-title-zh { margin-bottom: 6px; }
+  .photo-page-subtitle {
+    margin: 0 0 22px;
+    color: #c9966a;
+    font-size: 12px;
   }
   .carousel-track::-webkit-scrollbar { display: none; }
   .carousel-track.dragging {
@@ -2949,28 +2984,56 @@
   }
 
   .photo-frame {
-    flex: 0 0 100%;
-    height: min(56dvh, 430px);
+    --photo-tilt: -2.4deg;
+    flex: 0 0 clamp(230px, 68vw, 280px);
+    height: auto;
     scroll-snap-align: center;
-    border-radius: 14px;
-    border: 2px solid rgba(212,168,71,0.4);
-    overflow: hidden;
-    background: rgba(255,255,255,0.05);
+    border-radius: 6px;
+    border: none;
+    padding: 10px 10px 7px;
+    overflow: visible;
+    background: #f6eddd;
+    box-shadow: 0 14px 26px rgba(0,0,0,0.35);
     display: flex;
-    align-items: center;
-    justify-content: center;
     flex-direction: column;
-    gap: 10px;
+    gap: 0;
     cursor: pointer;
     position: relative;
+    transform: rotate(var(--photo-tilt));
     transition: opacity 0.3s, transform 0.3s;
   }
-  .photo-frame.dimmed { opacity: 0.45; transform: scale(0.95); }
+  .photo-frame:nth-child(even) { --photo-tilt: 2.2deg; }
+  .photo-frame.dimmed { opacity: 0.45; transform: rotate(var(--photo-tilt)) scale(0.94); }
 
-  /* ── 婚紗照：把 background-image 替換為你的圖片 URL ── */
-  .photo-frame.has-photo { background-size: cover; background-position: center; }
-  /* 要放婚紗照時：在 .photo-frame 加上 has-photo class，
-     並以行內樣式設定背景圖片網址即可 */
+  .polaroid-image {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 2 / 3;
+    border-radius: 3px;
+    background-color: #e9dcc4;
+    background-size: cover;
+    background-position: center;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+  .polaroid-caption {
+    margin-top: 9px;
+    color: #6b4a3a;
+    font-family: 'Playfair Display', 'Noto Serif TC', serif;
+    font-size: 12px;
+    font-style: italic;
+    letter-spacing: .5px;
+  }
+  .photo-placeholder-copy {
+    max-width: 170px;
+    margin-top: 10px;
+    color: #8a6c54;
+    font-size: 12px;
+    line-height: 1.7;
+    letter-spacing: 1px;
+  }
 
   .photo-placeholder { font-size: 46px; opacity: 0.5; }
   .photo-label { font-size: 12px; color: #c9966a; letter-spacing: 1px; }
@@ -3163,6 +3226,36 @@
   }
   .rsvp-btn:hover { transform: scale(1.03); opacity: 0.9; }
 
+  /* ── OPTION B: ENVELOPE RSVP ── */
+  .rsvp-envelope {
+    position: relative;
+    width: min(100%, 320px);
+    overflow: hidden;
+    border: 1px solid rgba(212,168,71,0.45);
+    border-radius: 18px;
+    padding: 96px 22px 32px;
+    background: rgba(255,255,255,0.05);
+    box-shadow: inset 0 0 0 5px rgba(26,10,10,0.55),
+                inset 0 0 0 6px rgba(212,168,71,0.3),
+                0 18px 40px rgba(0,0,0,0.28);
+  }
+  .rsvp-envelope::before {
+    content: '';
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 94px;
+    transform: none;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    border-top: 1px solid rgba(212,168,71,0.4);
+    border-radius: 17px 17px 0 0;
+    background: rgba(178,58,58,0.5);
+  }
+  .rsvp-envelope-content { position: relative; z-index: 1; }
+  .rsvp-envelope .rsvp-icon { margin-bottom: .65rem; }
+
   /* ── CLOSING ── */
   .footer-flakes {
     display: flex;
@@ -3195,6 +3288,48 @@
   .countdown-unit { display: inline-flex; align-items: baseline; gap: 2px; }
   .countdown-number { min-width: 2ch; font-size: 24px; font-variant-numeric: tabular-nums; }
   .countdown-unit-label, .countdown-separator { font-size: 12px; color: #c9966a; }
+
+  /* ── OPTION C: ORNAMENT COUNTDOWN ── */
+  .ornament-countdown {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: clamp(8px, 3vw, 16px);
+    width: 100%;
+    margin-bottom: 18px;
+  }
+  .countdown-ornament {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform-origin: top center;
+    animation: ornamentSway 3.6s ease-in-out infinite;
+  }
+  .countdown-ornament:nth-child(2) { animation-duration: 4.4s; }
+  .countdown-ornament:nth-child(3) { animation-duration: 3.9s; }
+  .countdown-ornament:nth-child(4) { animation-duration: 4.7s; }
+  .ornament-string { width: 1px; height: var(--string-height); background: rgba(212,168,71,0.5); }
+  .ornament-cap { width: 13px; height: 8px; border-radius: 3px 3px 0 0; background: #d4a847; }
+  .ornament-ball {
+    width: clamp(61px, 17vw, 74px);
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid rgba(212,168,71,0.55);
+    border-radius: 50%;
+    background: var(--ornament-bg);
+  }
+  .ornament-number {
+    color: #d4a847;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(21px, 6vw, 25px);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.05;
+  }
+  .ornament-label { margin-top: 3px; color: #c9966a; font-size: 10px; letter-spacing: 2px; }
+  @keyframes ornamentSway { 0%,100%{transform:rotate(-2.5deg)} 50%{transform:rotate(2.5deg)} }
 
   /* ── MUSIC BAR ── */
   .music-toggle {
@@ -3283,13 +3418,12 @@
     .carousel-track {
       max-width: 760px;
       gap: 16px;
-      padding: 0 25%;
+      padding-inline: max(14%, calc((100% - 280px) / 2));
       margin: 0 auto;
     }
 
     .photo-frame {
-      flex-basis: min(58%, 390px);
-      height: min(58dvh, 520px);
+      flex-basis: 280px;
     }
 
     .info-cards {
@@ -3386,12 +3520,11 @@
 
     .carousel-track {
       max-width: 900px;
-      padding: 0 28%;
+      padding-inline: max(14%, calc((100% - 280px) / 2));
     }
 
     .photo-frame {
-      flex-basis: 360px;
-      height: min(58dvh, 540px);
+      flex-basis: 280px;
     }
 
     .info-cards {
@@ -3444,9 +3577,8 @@
       margin-bottom: 0.8rem;
     }
 
-    .photo-frame {
-      height: min(50dvh, 390px);
-    }
+    .photo-frame { flex-basis: clamp(210px, 62vw, 250px); }
+    .polaroid-image { aspect-ratio: 2 / 3; }
   }
 </style>
 <style>
@@ -3562,6 +3694,29 @@
 
     <!-- 1 · HERO -->
     <section class="page">
+      <div class="hero-lights" aria-hidden="true">
+        <svg class="hero-light-wires" viewBox="0 0 100 88" preserveAspectRatio="none">
+          <path d="M5 69 C20 66 34 55 43 35 C48 24 51 11 54 2"></path>
+          <path d="M36 2 C42 20 51 38 63 51 C73 62 84 68 96 71"></path>
+        </svg>
+        <div class="light-strand">
+          <span class="hero-light" style="--bulb-x:6%;--bulb-y:70px;--bulb-color:#d4a847;--bulb-delay:0s;--bulb-rotate:-10deg"></span>
+          <span class="hero-light" style="--bulb-x:17%;--bulb-y:65px;--bulb-color:#b23a3a;--bulb-delay:.23s;--bulb-rotate:8deg"></span>
+          <span class="hero-light" style="--bulb-x:28%;--bulb-y:57px;--bulb-color:#4a7a5a;--bulb-delay:.46s;--bulb-rotate:-5deg"></span>
+          <span class="hero-light" style="--bulb-x:38%;--bulb-y:45px;--bulb-color:#f0d9a6;--bulb-delay:.69s;--bulb-rotate:6deg"></span>
+          <span class="hero-light" style="--bulb-x:46%;--bulb-y:28px;--bulb-color:#d4a847;--bulb-delay:.92s;--bulb-rotate:-8deg"></span>
+          <span class="hero-light" style="--bulb-x:53%;--bulb-y:7px;--bulb-color:#b23a3a;--bulb-delay:1.15s;--bulb-rotate:9deg"></span>
+        </div>
+        <div class="light-strand">
+          <span class="hero-light" style="--bulb-x:37%;--bulb-y:7px;--bulb-color:#4a7a5a;--bulb-delay:.31s;--bulb-rotate:7deg"></span>
+          <span class="hero-light" style="--bulb-x:43%;--bulb-y:24px;--bulb-color:#f0d9a6;--bulb-delay:.54s;--bulb-rotate:-9deg"></span>
+          <span class="hero-light" style="--bulb-x:51%;--bulb-y:40px;--bulb-color:#d4a847;--bulb-delay:.77s;--bulb-rotate:5deg"></span>
+          <span class="hero-light" style="--bulb-x:62%;--bulb-y:53px;--bulb-color:#b23a3a;--bulb-delay:1s;--bulb-rotate:-7deg"></span>
+          <span class="hero-light" style="--bulb-x:73%;--bulb-y:63px;--bulb-color:#4a7a5a;--bulb-delay:1.23s;--bulb-rotate:8deg"></span>
+          <span class="hero-light" style="--bulb-x:84%;--bulb-y:68px;--bulb-color:#f0d9a6;--bulb-delay:1.46s;--bulb-rotate:-5deg"></span>
+          <span class="hero-light" style="--bulb-x:95%;--bulb-y:72px;--bulb-color:#d4a847;--bulb-delay:1.69s;--bulb-rotate:9deg"></span>
+        </div>
+      </div>
       <div class="hero-crest" aria-hidden="true">
         <svg class="flake" viewBox="-50 -50 100 100"><use href="#snowflake"></use></svg>
       </div>
@@ -3595,17 +3750,18 @@
     </section>
 
     <!-- 2 · PHOTOS -->
-    <section class="page">
+    <section class="page photos-page">
       <p class="page-title-zh">婚紗照搶先看</p>
+      <p class="photo-page-subtitle">— 貼在聖誕卡上的回憶 —</p>
 
       <div class="carousel-track" id="carouselTrack">
-        <div class="photo-frame has-photo" style="background-image: url('assets/wedding-photo-01.jpg')" aria-label="婚紗照 1"></div>
-        <div class="photo-frame has-photo" style="background-image: url('assets/wedding-photo-02.jpg')" aria-label="婚紗照 2"></div>
-        <div class="photo-frame has-photo" style="background-image: url('assets/wedding-photo-03.jpg')" aria-label="婚紗照 3"></div>
-        <div class="photo-frame has-photo" style="background-image: url('assets/wedding-photo-04.jpg')" aria-label="婚紗照 4"></div>
+        <div class="photo-frame" aria-label="婚紗照 1"><div class="polaroid-image" style="background-image:url('assets/wedding-photo-01.jpg')"></div><div class="polaroid-caption">Adam &amp; Lynn</div></div>
+        <div class="photo-frame" aria-label="婚紗照 2"><div class="polaroid-image" style="background-image:url('assets/wedding-photo-02.jpg')"></div><div class="polaroid-caption">Adam &amp; Lynn</div></div>
+        <div class="photo-frame" aria-label="婚紗照 3"><div class="polaroid-image" style="background-image:url('assets/wedding-photo-03.jpg')"></div><div class="polaroid-caption">Adam &amp; Lynn</div></div>
+        <div class="photo-frame" aria-label="婚紗照 4"><div class="polaroid-image" style="background-image:url('assets/wedding-photo-04.jpg')"></div><div class="polaroid-caption">Adam &amp; Lynn</div></div>
         <div class="photo-frame">
-          <div class="photo-placeholder">📷</div>
-          <div class="photo-label">與我們一起創造新的回憶</div>
+          <div class="polaroid-image"><div><div class="photo-placeholder">📷</div><div class="photo-placeholder-copy">期待與你一起創造新的回憶</div></div></div>
+          <div class="polaroid-caption">Adam &amp; Lynn</div>
         </div>
       </div>
       <div class="carousel-dots">
@@ -3688,42 +3844,48 @@
         </div>
       </div>
     </section>
-    <!-- 5 · RSVP -->
+    <!-- 4 · RSVP -->
     <section class="page">
-      <div class="rsvp-icon"><i class="ti ti-mail-heart" aria-hidden="true"></i></div>
-      <h2 class="rsvp-title">出席回覆</h2>
-      <p class="rsvp-sub">
-        期待在婚禮現場與你相見<br>
-        請在 <strong style="color:#d4a847">12 月 10 日前</strong> 填寫出席表單<br>
-        讓我們為你準備最溫暖的席位
-      </p>
-      <a class="rsvp-btn" href="https://forms.gle/kVNFYoF64xwpeRm68" target="_blank" rel="noopener noreferrer">
-        <i class="ti ti-clipboard-check" style="font-size:18px;" aria-hidden="true"></i>
-        填寫出席表單
-      </a>
+      <div class="rsvp-envelope">
+        <div class="rsvp-envelope-content">
+          <div class="rsvp-icon"><i class="ti ti-mail-heart" aria-hidden="true"></i></div>
+          <h2 class="rsvp-title">出席回覆</h2>
+          <p class="rsvp-sub">
+            期待在婚禮現場與你相見<br>
+            請在 <strong style="color:#d4a847">12 月 10 日前</strong> 填寫出席表單<br>
+            讓我們為你準備最溫暖的席位
+          </p>
+          <a class="rsvp-btn" href="https://forms.gle/kVNFYoF64xwpeRm68" target="_blank" rel="noopener noreferrer">
+            <i class="ti ti-clipboard-check" style="font-size:18px;" aria-hidden="true"></i>
+            填寫出席表單
+          </a>
+        </div>
+      </div>
     </section>
 
-    <!-- 6 · CLOSING -->
+    <!-- 5 · CLOSING -->
     <section class="page">
-      <div class="footer-flakes" aria-hidden="true">
-        <svg class="flake" viewBox="-50 -50 100 100"><use href="#snowflake"></use></svg>
-        <span class="flourish">❧</span>
-        <svg class="flake mid" viewBox="-50 -50 100 100"><use href="#snowflake"></use></svg>
-        <span class="flourish">❧</span>
-        <svg class="flake" viewBox="-50 -50 100 100"><use href="#snowflake"></use></svg>
+      <div class="ornament-countdown" id="weddingCountdown" role="timer" aria-live="polite" aria-label="距離婚禮倒數">
+        <div class="countdown-ornament" style="--string-height:34px;--ornament-bg:rgba(178,58,58,.3)">
+          <span class="ornament-string"></span><span class="ornament-cap"></span>
+          <span class="ornament-ball"><span class="ornament-number" id="countdownMonths">0</span><span class="ornament-label">月</span></span>
+        </div>
+        <div class="countdown-ornament" style="--string-height:16px;--ornament-bg:rgba(63,107,79,.3)">
+          <span class="ornament-string"></span><span class="ornament-cap"></span>
+          <span class="ornament-ball"><span class="ornament-number" id="countdownDays">0</span><span class="ornament-label">日</span></span>
+        </div>
+        <div class="countdown-ornament" style="--string-height:44px;--ornament-bg:rgba(212,168,71,.18)">
+          <span class="ornament-string"></span><span class="ornament-cap"></span>
+          <span class="ornament-ball"><span class="ornament-number" id="countdownHours">00</span><span class="ornament-label">時</span></span>
+        </div>
+        <div class="countdown-ornament" style="--string-height:24px;--ornament-bg:rgba(178,58,58,.22)">
+          <span class="ornament-string"></span><span class="ornament-cap"></span>
+          <span class="ornament-ball"><span class="ornament-number" id="countdownMinutes">00</span><span class="ornament-label">分</span></span>
+        </div>
       </div>
+      <p class="countdown-label">距離婚禮</p>
       <p class="footer-date">12.25.2026</p>
       <p class="footer-sub">With Love · 期待與你共慶</p>
-      <div class="countdown" aria-label="距離婚禮倒數">
-        <p class="countdown-label">距離婚禮</p>
-        <p class="countdown-time" id="weddingCountdown" role="timer" aria-live="polite">
-          <span class="countdown-unit"><span class="countdown-number" id="countdownDays">0</span><span class="countdown-unit-label">日</span></span>
-          <span class="countdown-separator" aria-hidden="true">:</span>
-          <span class="countdown-unit"><span class="countdown-number" id="countdownHours">00</span><span class="countdown-unit-label">時</span></span>
-          <span class="countdown-separator" aria-hidden="true">:</span>
-          <span class="countdown-unit"><span class="countdown-number" id="countdownMinutes">00</span><span class="countdown-unit-label">分</span></span>
-        </p>
-      </div>
     </section>
 
   </div><!-- /pager -->
@@ -3780,6 +3942,51 @@
     requestAnimationFrame(drawSnow);
   }
   drawSnow();
+
+  /* ── RESPONSIVE HERO LIGHTS ── */
+  const heroLights = document.querySelector('.hero-lights');
+  const heroLightPaths = Array.from(heroLights.querySelectorAll('.hero-light-wires path'));
+  const heroLightStrands = Array.from(heroLights.querySelectorAll('.light-strand'));
+  const heroLightColors = ['#d4a847', '#b23a3a', '#4a7a5a', '#f0d9a6'];
+
+  function renderHeroLights() {
+    const width = heroLights.clientWidth;
+    const totalBulbs = Math.min(36, Math.max(13, Math.round(width / 30)));
+    const pathLengths = heroLightPaths.map(path => path.getTotalLength());
+    const totalPathLength = pathLengths.reduce((sum, length) => sum + length, 0);
+    const firstStrandCount = Math.round(totalBulbs * pathLengths[0] / totalPathLength);
+    const strandCounts = [firstStrandCount, totalBulbs - firstStrandCount];
+    const safeInsetPercent = Math.max(2, 7 / width * 100);
+
+    heroLightStrands.forEach((strand, strandIndex) => {
+      strand.replaceChildren();
+      const path = heroLightPaths[strandIndex];
+      const pathLength = pathLengths[strandIndex];
+      const count = strandCounts[strandIndex];
+
+      for (let i = 0; i < count; i++) {
+        const progress = count === 1 ? 0.5 : 0.03 + (i / (count - 1)) * 0.94;
+        const point = path.getPointAtLength(pathLength * progress);
+        const bulb = document.createElement('span');
+        bulb.className = 'hero-light';
+        bulb.style.setProperty('--bulb-x', Math.min(100 - safeInsetPercent, Math.max(safeInsetPercent, point.x)) + '%');
+        bulb.style.setProperty('--bulb-y', Math.min(76, Math.max(6, point.y)) + 'px');
+        bulb.style.setProperty('--bulb-color', heroLightColors[(i + strandIndex * 2) % heroLightColors.length]);
+        bulb.style.setProperty('--bulb-delay', ((i + strandIndex * 0.7) * 0.19).toFixed(2) + 's');
+        bulb.style.setProperty('--bulb-rotate', (((i * 7 + strandIndex * 5) % 19) - 9) + 'deg');
+        strand.appendChild(bulb);
+      }
+    });
+
+    heroLights.dataset.bulbCount = String(totalBulbs);
+  }
+
+  renderHeroLights();
+  let heroLightResizeTick;
+  window.addEventListener('resize', () => {
+    cancelAnimationFrame(heroLightResizeTick);
+    heroLightResizeTick = requestAnimationFrame(renderHeroLights);
+  });
 
   /* ── PAGE NAV (left dots) ── */
   const pager = document.getElementById('pager');
@@ -3908,18 +4115,32 @@
 
   /* ── WEDDING COUNTDOWN ── */
   const weddingTime = new Date('2026-12-25T18:00:00+08:00').getTime();
+  const countdownMonths = document.getElementById('countdownMonths');
   const countdownDays = document.getElementById('countdownDays');
   const countdownHours = document.getElementById('countdownHours');
   const countdownMinutes = document.getElementById('countdownMinutes');
   const weddingCountdown = document.getElementById('weddingCountdown');
 
   function updateCountdown() {
-    const remaining = Math.max(0, weddingTime - Date.now());
-    const totalMinutes = Math.floor(remaining / 60000);
-    const days = Math.floor(totalMinutes / 1440);
-    const hours = Math.floor((totalMinutes % 1440) / 60);
-    const minutes = totalMinutes % 60;
+    const now = new Date();
+    const remaining = Math.max(0, weddingTime - now.getTime());
+    let months = 0;
+    let monthCursor = new Date(now.getTime());
+    if (remaining > 0) {
+      while (months < 120) {
+        const next = new Date(monthCursor.getTime());
+        next.setMonth(next.getMonth() + 1);
+        if (next.getTime() > weddingTime) break;
+        monthCursor = next;
+        months += 1;
+      }
+    }
+    const residualMinutes = Math.floor(Math.max(0, weddingTime - monthCursor.getTime()) / 60000);
+    const days = Math.floor(residualMinutes / 1440);
+    const hours = Math.floor((residualMinutes % 1440) / 60);
+    const minutes = residualMinutes % 60;
 
+    countdownMonths.textContent = String(months);
     countdownDays.textContent = String(days);
     countdownHours.textContent = String(hours).padStart(2, '0');
     countdownMinutes.textContent = String(minutes).padStart(2, '0');
