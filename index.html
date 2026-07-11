@@ -3018,6 +3018,60 @@
     place-items: center;
     overflow: hidden;
   }
+
+  /* ── FIXED ACCUMULATING SNOW (pages 2–5) ── */
+  .snow-accumulation {
+    --snow-height: 0px;
+    --snow-crest-scale: 0;
+    --snow-visibility: 0;
+    --snow-top-color: rgba(206,216,221,.82);
+    position: fixed;
+    left: 50%;
+    bottom: 0;
+    width: 100%;
+    max-width: 480px;
+    height: var(--snow-height);
+    pointer-events: none;
+    z-index: 50;
+    opacity: 0;
+    color: var(--snow-top-color);
+    background:
+      linear-gradient(180deg, var(--snow-top-color) 0%, rgba(193,204,210,.8) 58%, rgba(174,190,199,.76) 100%);
+    box-shadow: none;
+    transform: translateX(-50%);
+    transition: opacity .25s linear;
+  }
+  .snow-accumulation.has-snow { opacity: var(--snow-visibility); }
+  .snow-crest {
+    position: absolute;
+    top: -10px;
+    right: 0;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    overflow: visible;
+    filter: drop-shadow(0 -1px 2px rgba(218,229,234,.1));
+    transform: scaleY(var(--snow-crest-scale));
+    transform-origin: center bottom;
+  }
+  .snow-accumulation::after {
+    content: "";
+    position: absolute;
+    top: 7px;
+    right: 0;
+    left: 0;
+    height: 22px;
+    opacity: .5;
+    background:
+      radial-gradient(circle at 15% 45%, rgba(151,173,184,.62) 0 1px, transparent 1.8px),
+      radial-gradient(circle at 48% 65%, rgba(143,166,178,.55) 0 1.2px, transparent 2px),
+      radial-gradient(circle at 78% 35%, rgba(229,235,238,.62) 0 1.4px, transparent 2.2px);
+    background-size: 78px 22px, 96px 24px, 112px 26px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .snow-accumulation { transition: none; }
+  }
   .polaroid-caption {
     margin-top: 9px;
     color: #6b4a3a;
@@ -3374,7 +3428,8 @@
       max-width: min(100%, 840px);
     }
 
-    .snow-canvas {
+    .snow-canvas,
+    .snow-accumulation {
       max-width: min(100%, 840px);
     }
 
@@ -3494,7 +3549,8 @@
       max-width: min(100%, 1040px);
     }
 
-    .snow-canvas {
+    .snow-canvas,
+    .snow-accumulation {
       max-width: min(100%, 1040px);
     }
 
@@ -3689,6 +3745,11 @@
 
 <div class="inv-root">
   <canvas class="snow-canvas" id="snowCanvas"></canvas>
+  <div class="snow-accumulation" id="snowAccumulation" aria-hidden="true">
+    <svg class="snow-crest" viewBox="0 0 1000 18" preserveAspectRatio="none" focusable="false">
+      <path fill="currentColor" d="M0 13 C70 8 125 15 195 11 C275 6 345 16 425 12 C505 8 575 15 655 10 C735 6 805 15 880 11 C930 8 970 11 1000 8 L1000 18 L0 18 Z"></path>
+    </svg>
+  </div>
 
   <div class="pager" id="pager">
 
@@ -3993,6 +4054,53 @@
   const pages = Array.from(pager.querySelectorAll('.page'));
   const pageNav = document.getElementById('pageNav');
 
+  /* ── ACCUMULATING SNOW (0.5 cm per minute, safely capped below content) ── */
+  let snowStartedAt = null;
+  const snowGrowthPxPerMs = (96 / 2.54 * 0.5) / 60000;
+  const snowBank = document.getElementById('snowAccumulation');
+  let snowMaxHeight = 0;
+
+  function visibleContentBottom(page) {
+    const pageRect = page.getBoundingClientRect();
+    let bottom = pageRect.top;
+    page.querySelectorAll('*').forEach(element => {
+      const style = getComputedStyle(element);
+      if (style.display === 'none' || style.visibility === 'hidden') return;
+      const rect = element.getBoundingClientRect();
+      if (rect.width > 0 && rect.height > 0) bottom = Math.max(bottom, rect.bottom);
+    });
+    return bottom - pageRect.top;
+  }
+
+  function measureSnowCaps() {
+    const caps = pages.slice(1).map(page => {
+      const contentBottom = visibleContentBottom(page);
+      const clearSpace = page.clientHeight - contentBottom;
+      const designCap = Math.min(94, page.clientHeight * 0.11);
+      // One shared cap prevents thickness changes while switching pages.
+      return Math.max(0, Math.min(designCap, clearSpace - 24));
+    });
+    snowMaxHeight = Math.min(...caps);
+  }
+
+  function updateSnowAccumulation() {
+    const elapsed = snowStartedAt === null ? 0 : Date.now() - snowStartedAt;
+    const grownHeight = elapsed * snowGrowthPxPerMs;
+    const height = Math.min(grownHeight, snowMaxHeight);
+    const pageVisibility = Math.max(0, Math.min(1, pager.scrollTop / (pager.clientHeight * 0.35)));
+    snowBank.style.setProperty('--snow-height', height.toFixed(2) + 'px');
+    snowBank.style.setProperty('--snow-crest-scale', Math.min(1, height / 10).toFixed(3));
+    snowBank.style.setProperty('--snow-visibility', pageVisibility.toFixed(3));
+    snowBank.classList.toggle('has-snow', height > 0.02);
+    requestAnimationFrame(updateSnowAccumulation);
+  }
+
+  measureSnowCaps();
+  updateSnowAccumulation();
+  window.addEventListener('resize', () => {
+    measureSnowCaps();
+  });
+
   pages.forEach((p, i) => {
     const b = document.createElement('button');
     b.className = 'pnav-dot' + (i === 0 ? ' active' : '');
@@ -4005,6 +4113,7 @@
 
   let navTick;
   pager.addEventListener('scroll', () => {
+    if (snowStartedAt === null && pager.scrollTop > 1) snowStartedAt = Date.now();
     cancelAnimationFrame(navTick);
     navTick = requestAnimationFrame(() => {
       const idx = Math.round(pager.scrollTop / pager.clientHeight);
