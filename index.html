@@ -2841,6 +2841,14 @@
     line-height: 1.1;
     margin-bottom: 0.5rem;
   }
+  .hero-title-icon {
+    display: inline-block;
+    width: auto;
+    height: 1em;
+    margin-left: 0.08em;
+    object-fit: contain;
+    vertical-align: -0.12em;
+  }
   .hero-names {
     font-family: 'Playfair Display', serif;
     font-size: 18px;
@@ -2871,6 +2879,8 @@
   .divider {
     display: flex;
     align-items: center;
+    justify-content: center;
+    align-self: center;
     gap: 12px;
     margin: 0.9rem auto;
     width: 80%;
@@ -2898,12 +2908,6 @@
     color: #d4a847;
     filter: drop-shadow(0 0 7px rgba(212,168,71,0.35));
   }
-  .hero-crest { color: #d4a847; margin-bottom: 1.1rem; }
-  .hero-crest .flake {
-    width: 74px; height: 74px;
-    animation: spin 64s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
   .divider-flake { width: 18px; height: 18px; }
   .hero-flakes {
     display: flex;
@@ -2933,13 +2937,16 @@
 
   /* ── OPTION A: HERO STRING LIGHTS ── */
   .hero-lights {
-    position: absolute;
+    position: fixed;
     top: 0;
-    left: 0;
-    right: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
     height: 88px;
     overflow: hidden;
     pointer-events: none;
+    z-index: 3;
   }
   .hero-light-wires { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
   .hero-light-wires path { fill: none; stroke: rgba(212,168,71,0.38); stroke-width: .55; vector-effect: non-scaling-stroke; }
@@ -3303,7 +3310,7 @@
     overflow: hidden;
     border: 1px solid rgba(212,168,71,0.45);
     border-radius: 18px;
-    padding: 96px 22px 32px;
+    padding: 132px 22px 32px;
     background: rgba(255,255,255,0.05);
     box-shadow: inset 0 0 0 5px rgba(26,10,10,0.55),
                 inset 0 0 0 6px rgba(212,168,71,0.3),
@@ -3324,7 +3331,28 @@
     background: rgba(178,58,58,0.5);
   }
   .rsvp-envelope-content { position: relative; z-index: 1; }
-  .rsvp-envelope .rsvp-icon { margin-bottom: .65rem; }
+  .rsvp-wax-seal {
+    position: absolute;
+    z-index: 2;
+    top: 63px;
+    left: 50%;
+    width: 64px;
+    height: 64px;
+    transform: translateX(-50%) rotate(-5deg);
+    overflow: hidden;
+    border-radius: 50%;
+    filter: drop-shadow(0 4px 5px rgba(0, 0, 0, .38));
+  }
+  .rsvp-wax-seal img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 92px;
+    height: 92px;
+    max-width: none;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+  }
 
   /* ── CLOSING ── */
   .footer-flakes {
@@ -3346,7 +3374,13 @@
   }
   .footer-sub { font-size: 12px; color: #c9966a; letter-spacing: 3px; margin-top: 8px; }
   .countdown { margin-top: 1.7rem; text-align: center; }
-  .countdown-label { font-size: 11px; color: #c9966a; letter-spacing: 3px; margin-bottom: 7px; }
+  .countdown-label {
+    margin-bottom: 9px;
+    color: rgba(212,168,71,0.5);
+    font-size: 20px;
+    letter-spacing: 3px;
+    text-align: center;
+  }
   .countdown-time {
     display: flex;
     align-items: baseline;
@@ -3360,13 +3394,18 @@
   .countdown-unit-label, .countdown-separator { font-size: 12px; color: #c9966a; }
 
   /* ── OPTION C: ORNAMENT COUNTDOWN ── */
+  .closing-countdown {
+    width: fit-content;
+    max-width: 100%;
+    margin-bottom: 18px;
+  }
   .ornament-countdown {
     display: flex;
     align-items: flex-start;
     justify-content: center;
     gap: clamp(8px, 3vw, 16px);
-    width: 100%;
-    margin-bottom: 18px;
+    width: auto;
+    margin-bottom: 0;
   }
   .countdown-ornament {
     display: flex;
@@ -3445,7 +3484,8 @@
     }
 
     .snow-canvas,
-    .snow-accumulation {
+    .snow-accumulation,
+    .hero-lights {
       max-width: min(100%, 840px);
     }
 
@@ -3570,7 +3610,8 @@
     }
 
     .snow-canvas,
-    .snow-accumulation {
+    .snow-accumulation,
+    .hero-lights {
       max-width: min(100%, 1040px);
     }
 
@@ -3622,11 +3663,6 @@
     .page {
       padding-top: 2.1rem;
       padding-bottom: 2.1rem;
-    }
-
-    .hero-crest .flake {
-      width: 58px;
-      height: 58px;
     }
 
     .hero-subtitle,
@@ -3743,8 +3779,7 @@
 <div class="site-loader" aria-live="polite" aria-label="頁面載入中">
   <div class="site-loader__inner">
     <img class="site-loader__mark" src="assets/dandan-invitation-delivery.gif" alt="" aria-hidden="true">
-    <div class="site-loader__names">婚禮喜帖</div>
-    <p class="site-loader__text">蛋蛋正在送來你的喜帖</p>
+    <div class="site-loader__names">蛋蛋正在送來你的喜帖</div>
     <div class="site-loader__bar" aria-hidden="true"></div>
   </div>
 </div>
@@ -3775,41 +3810,22 @@
       <path fill="currentColor" d="M0 13 C70 8 125 15 195 11 C275 6 345 16 425 12 C505 8 575 15 655 10 C735 6 805 15 880 11 C930 8 970 11 1000 8 L1000 18 L0 18 Z"></path>
     </svg>
   </div>
+  <div class="hero-lights" aria-hidden="true">
+    <svg class="hero-light-wires" viewBox="0 0 100 88" preserveAspectRatio="none">
+      <path d="M5 69 C20 66 34 55 43 35 C48 24 51 11 54 2"></path>
+      <path d="M36 2 C42 20 51 38 63 51 C73 62 84 68 96 71"></path>
+    </svg>
+    <div class="light-strand"></div>
+    <div class="light-strand"></div>
+  </div>
 
   <div class="pager" id="pager">
 
     <!-- 1 · HERO -->
     <section class="page">
-      <div class="hero-lights" aria-hidden="true">
-        <svg class="hero-light-wires" viewBox="0 0 100 88" preserveAspectRatio="none">
-          <path d="M5 69 C20 66 34 55 43 35 C48 24 51 11 54 2"></path>
-          <path d="M36 2 C42 20 51 38 63 51 C73 62 84 68 96 71"></path>
-        </svg>
-        <div class="light-strand">
-          <span class="hero-light" style="--bulb-x:6%;--bulb-y:70px;--bulb-color:#d4a847;--bulb-delay:0s;--bulb-rotate:-10deg"></span>
-          <span class="hero-light" style="--bulb-x:17%;--bulb-y:65px;--bulb-color:#b23a3a;--bulb-delay:.23s;--bulb-rotate:8deg"></span>
-          <span class="hero-light" style="--bulb-x:28%;--bulb-y:57px;--bulb-color:#4a7a5a;--bulb-delay:.46s;--bulb-rotate:-5deg"></span>
-          <span class="hero-light" style="--bulb-x:38%;--bulb-y:45px;--bulb-color:#f0d9a6;--bulb-delay:.69s;--bulb-rotate:6deg"></span>
-          <span class="hero-light" style="--bulb-x:46%;--bulb-y:28px;--bulb-color:#d4a847;--bulb-delay:.92s;--bulb-rotate:-8deg"></span>
-          <span class="hero-light" style="--bulb-x:53%;--bulb-y:7px;--bulb-color:#b23a3a;--bulb-delay:1.15s;--bulb-rotate:9deg"></span>
-        </div>
-        <div class="light-strand">
-          <span class="hero-light" style="--bulb-x:37%;--bulb-y:7px;--bulb-color:#4a7a5a;--bulb-delay:.31s;--bulb-rotate:7deg"></span>
-          <span class="hero-light" style="--bulb-x:43%;--bulb-y:24px;--bulb-color:#f0d9a6;--bulb-delay:.54s;--bulb-rotate:-9deg"></span>
-          <span class="hero-light" style="--bulb-x:51%;--bulb-y:40px;--bulb-color:#d4a847;--bulb-delay:.77s;--bulb-rotate:5deg"></span>
-          <span class="hero-light" style="--bulb-x:62%;--bulb-y:53px;--bulb-color:#b23a3a;--bulb-delay:1s;--bulb-rotate:-7deg"></span>
-          <span class="hero-light" style="--bulb-x:73%;--bulb-y:63px;--bulb-color:#4a7a5a;--bulb-delay:1.23s;--bulb-rotate:8deg"></span>
-          <span class="hero-light" style="--bulb-x:84%;--bulb-y:68px;--bulb-color:#f0d9a6;--bulb-delay:1.46s;--bulb-rotate:-5deg"></span>
-          <span class="hero-light" style="--bulb-x:95%;--bulb-y:72px;--bulb-color:#d4a847;--bulb-delay:1.69s;--bulb-rotate:9deg"></span>
-        </div>
-      </div>
-      <div class="hero-crest" aria-hidden="true">
-        <svg class="flake" viewBox="-50 -50 100 100"><use href="#snowflake"></use></svg>
-      </div>
-
       <p class="hero-subtitle">婚禮喜帖</p>
-      <p class="hero-names">2026.07.15</p>
-      <h1 class="hero-title">我們結婚啦🎉</h1>
+      <p class="hero-names">2026.07.18</p>
+      <h1 class="hero-title">我 們 結 婚 啦 <img class="hero-title-icon" src="assets/gold-party-popper-transparent.png" alt="" aria-hidden="true"></h1>
       <div class="hero-couple" aria-label="新郎新娘姓名"><span class="hero-couple-name">洪世彬 / Adam</span><span class="hero-couple-heart">♥️</span><span class="hero-couple-name">魏琳 / Lynn</span></div>
 
       <div class="divider">
@@ -3838,7 +3854,6 @@
     <!-- 2 · PHOTOS -->
     <section class="page photos-page">
       <p class="page-title-zh">婚紗照搶先看</p>
-      <p class="photo-page-subtitle">— 貼在聖誕卡上的回憶 —</p>
 
       <div class="carousel-track" id="carouselTrack">
         <div class="photo-frame" aria-label="婚紗照 1"><div class="polaroid-image" style="background-image:url('assets/wedding-photo-01.jpg')"></div><div class="polaroid-caption">Adam &amp; Lynn</div></div>
@@ -3933,13 +3948,15 @@
     <!-- 4 · RSVP -->
     <section class="page">
       <div class="rsvp-envelope">
+        <div class="rsvp-wax-seal" aria-hidden="true">
+          <img src="assets/gold-snowflake-wax-seal-transparent.png" alt="">
+        </div>
         <div class="rsvp-envelope-content">
-          <div class="rsvp-icon"><i class="ti ti-mail-heart" aria-hidden="true"></i></div>
           <h2 class="rsvp-title">出席回覆</h2>
           <p class="rsvp-sub">
             期待在婚禮現場與你相見<br>
-            請在 <strong style="color:#d4a847">12 月 10 日前</strong> 填寫出席表單<br>
-            讓我們為你準備最溫暖的席位
+            請在 <strong style="color:#d4a847">8 月 31 日前</strong> 填寫出席表單<br>
+            讓我們為你準備席位
           </p>
           <a class="rsvp-btn" href="https://forms.gle/kVNFYoF64xwpeRm68" target="_blank" rel="noopener noreferrer">
             <i class="ti ti-clipboard-check" style="font-size:18px;" aria-hidden="true"></i>
@@ -3951,25 +3968,27 @@
 
     <!-- 5 · CLOSING -->
     <section class="page">
-      <div class="ornament-countdown" id="weddingCountdown" role="timer" aria-live="polite" aria-label="距離婚禮倒數">
-        <div class="countdown-ornament" style="--string-height:34px;--ornament-bg:rgba(178,58,58,.3)">
-          <span class="ornament-string"></span><span class="ornament-cap"></span>
-          <span class="ornament-ball"><span class="ornament-number" id="countdownMonths">0</span><span class="ornament-label">月</span></span>
-        </div>
-        <div class="countdown-ornament" style="--string-height:16px;--ornament-bg:rgba(63,107,79,.3)">
-          <span class="ornament-string"></span><span class="ornament-cap"></span>
-          <span class="ornament-ball"><span class="ornament-number" id="countdownDays">0</span><span class="ornament-label">日</span></span>
-        </div>
-        <div class="countdown-ornament" style="--string-height:44px;--ornament-bg:rgba(212,168,71,.18)">
-          <span class="ornament-string"></span><span class="ornament-cap"></span>
-          <span class="ornament-ball"><span class="ornament-number" id="countdownHours">00</span><span class="ornament-label">時</span></span>
-        </div>
-        <div class="countdown-ornament" style="--string-height:24px;--ornament-bg:rgba(178,58,58,.22)">
-          <span class="ornament-string"></span><span class="ornament-cap"></span>
-          <span class="ornament-ball"><span class="ornament-number" id="countdownMinutes">00</span><span class="ornament-label">分</span></span>
+      <div class="closing-countdown">
+        <p class="countdown-label">距離婚禮</p>
+        <div class="ornament-countdown" id="weddingCountdown" role="timer" aria-live="polite" aria-label="距離婚禮倒數">
+          <div class="countdown-ornament" style="--string-height:34px;--ornament-bg:rgba(178,58,58,.3)">
+            <span class="ornament-string"></span><span class="ornament-cap"></span>
+            <span class="ornament-ball"><span class="ornament-number" id="countdownMonths">0</span><span class="ornament-label">月</span></span>
+          </div>
+          <div class="countdown-ornament" style="--string-height:16px;--ornament-bg:rgba(63,107,79,.3)">
+            <span class="ornament-string"></span><span class="ornament-cap"></span>
+            <span class="ornament-ball"><span class="ornament-number" id="countdownDays">0</span><span class="ornament-label">日</span></span>
+          </div>
+          <div class="countdown-ornament" style="--string-height:44px;--ornament-bg:rgba(212,168,71,.18)">
+            <span class="ornament-string"></span><span class="ornament-cap"></span>
+            <span class="ornament-ball"><span class="ornament-number" id="countdownHours">00</span><span class="ornament-label">時</span></span>
+          </div>
+          <div class="countdown-ornament" style="--string-height:24px;--ornament-bg:rgba(178,58,58,.22)">
+            <span class="ornament-string"></span><span class="ornament-cap"></span>
+            <span class="ornament-ball"><span class="ornament-number" id="countdownMinutes">00</span><span class="ornament-label">分</span></span>
+          </div>
         </div>
       </div>
-      <p class="countdown-label">距離婚禮</p>
       <p class="footer-date">12.25.2026</p>
       <p class="footer-sub">With Love · 期待與你共慶</p>
     </section>
@@ -4291,6 +4310,7 @@
   const backgroundMusic = document.getElementById('backgroundMusic');
   const musicToggle = document.getElementById('musicToggle');
   let musicEnabled = true;
+  backgroundMusic.volume = 0.25;
 
   function updateMusicToggle() {
     musicToggle.classList.toggle('is-muted', !musicEnabled);
