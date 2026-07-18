@@ -3747,6 +3747,7 @@
     height: 2px;
     overflow: hidden;
     background: rgba(245, 230, 208, .2);
+    transition: opacity .3s ease, transform .3s ease;
   }
 
   .site-loader__bar::before {
@@ -3756,6 +3757,53 @@
     height: 100%;
     background: #d4a847;
     animation: loaderBar 1.15s ease-in-out infinite;
+  }
+
+  .site-loader__open {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #d4a847, #c9966a);
+    border: none;
+    border-radius: 28px;
+    padding: 14px 32px;
+    color: #1a0a0a;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Noto Serif TC', serif;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(10px) scale(.96);
+    transition: transform .2s, opacity .4s ease;
+  }
+
+  .site-loader__open:hover {
+    opacity: .9;
+    transform: scale(1.03);
+  }
+
+  .site-loader__open:focus-visible {
+    outline: 2px solid #f4d67f;
+    outline-offset: 4px;
+  }
+
+  .site-loader.is-awaiting-open .site-loader__mark {
+    animation: none;
+    opacity: 1;
+  }
+
+  .site-loader.is-awaiting-open .site-loader__bar {
+    opacity: 0;
+    transform: scaleX(.5);
+  }
+
+  .site-loader.is-awaiting-open .site-loader__open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
   }
 
   body.is-ready .site-loader {
@@ -3773,6 +3821,13 @@
     0% { transform: translateX(-110%); }
     100% { transform: translateX(260%); }
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-loader__mark,
+    .site-loader__bar::before {
+      animation: none;
+    }
+  }
 </style>
 </head>
 <body class="is-loading">
@@ -3781,6 +3836,10 @@
     <img class="site-loader__mark" src="assets/dandan-invitation-delivery.gif" alt="" aria-hidden="true">
     <div class="site-loader__names">蛋蛋正在送來你的喜帖</div>
     <div class="site-loader__bar" aria-hidden="true"></div>
+    <button class="site-loader__open" type="button">
+      <i class="ti ti-mail-opened" style="font-size:18px;" aria-hidden="true"></i>
+      打開你的喜帖吧！
+    </button>
   </div>
 </div>
 
@@ -4350,22 +4409,37 @@
   });
 
   updateMusicToggle();
-  window.addEventListener('invitationready', () => {
-    playBackgroundMusic();
-  }, { once: true });
 </script>
 
 
 
 <script>
   (() => {
-    const ready = () => {
+    const loader = document.querySelector('.site-loader');
+    const loaderMessage = document.querySelector('.site-loader__names');
+    const openInvitation = document.querySelector('.site-loader__open');
+    let isReadyForOpen = false;
+
+    const revealOpenButton = () => {
+      if (isReadyForOpen) return;
+      isReadyForOpen = true;
+      loaderMessage.hidden = true;
+      loader.setAttribute('aria-label', '請打開喜帖');
+      loader.classList.add('is-awaiting-open');
+      openInvitation.focus({ preventScroll: true });
+    };
+
+    const enterInvitation = () => {
+      openInvitation.disabled = true;
+      playBackgroundMusic();
       document.body.classList.add('is-ready');
       window.setTimeout(() => {
         document.body.classList.remove('is-loading');
         window.dispatchEvent(new Event('invitationready'));
       }, 700);
     };
+
+    openInvitation.addEventListener('click', enterInvitation, { once: true });
 
     const loaded = new Promise(resolve => {
       if (document.readyState === 'complete') resolve();
@@ -4374,8 +4448,8 @@
     const fonts = document.fonts ? document.fonts.ready.catch(() => {}) : Promise.resolve();
     const minimum = new Promise(resolve => window.setTimeout(resolve, 5000));
 
-    Promise.all([loaded, fonts, minimum]).then(ready);
-    window.setTimeout(ready, 7000);
+    Promise.all([loaded, fonts, minimum]).then(revealOpenButton);
+    window.setTimeout(revealOpenButton, 7000);
   })();
 </script>
 </body></html>
