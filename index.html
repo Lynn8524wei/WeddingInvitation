@@ -3812,6 +3812,11 @@
     pointer-events: none;
   }
 
+  body.is-ready .site-loader .site-loader__open {
+    visibility: hidden;
+    pointer-events: none;
+  }
+
   @keyframes loaderPulse {
     0%, 100% { transform: scale(1); opacity: .72; }
     50% { transform: scale(1.08); opacity: 1; }
@@ -4435,6 +4440,8 @@
       document.body.classList.add('is-ready');
       window.setTimeout(() => {
         document.body.classList.remove('is-loading');
+        loader.hidden = true;
+        loader.style.display = 'none';
         window.dispatchEvent(new Event('invitationready'));
       }, 700);
     };
