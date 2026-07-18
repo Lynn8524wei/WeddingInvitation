@@ -4001,7 +4001,7 @@
 
 <!-- BACKGROUND MUSIC -->
 <audio id="backgroundMusic" src="assets/wedding-background-music.mp3" loop preload="auto"></audio>
-<button class="music-toggle" id="musicToggle" type="button" aria-label="Turn off background music" aria-pressed="true">
+<button class="music-toggle is-muted" id="musicToggle" type="button" aria-label="Turn on background music" aria-pressed="false">
   <span class="music-on" aria-hidden="true">&#128266;&#65038;</span>
   <span class="music-off" aria-hidden="true">&#128263;&#65038;</span>
 </button>
@@ -4309,7 +4309,7 @@
   /* BACKGROUND MUSIC */
   const backgroundMusic = document.getElementById('backgroundMusic');
   const musicToggle = document.getElementById('musicToggle');
-  let musicEnabled = true;
+  let musicEnabled = false;
   backgroundMusic.volume = 0.25;
 
   function updateMusicToggle() {
@@ -4318,22 +4318,40 @@
     musicToggle.setAttribute('aria-label', musicEnabled ? 'Turn off background music' : 'Turn on background music');
   }
 
-  function playBackgroundMusic() {
-    return backgroundMusic.play().catch(() => {
+  async function playBackgroundMusic() {
+    try {
+      await backgroundMusic.play();
+      musicEnabled = true;
+    } catch {
       // Browsers can require one user gesture before allowing audio playback.
-    });
+      musicEnabled = false;
+    }
+    updateMusicToggle();
   }
 
   musicToggle.addEventListener('click', () => {
-    musicEnabled = !musicEnabled;
-    if (musicEnabled) playBackgroundMusic();
-    else backgroundMusic.pause();
+    if (backgroundMusic.paused) {
+      playBackgroundMusic();
+    } else {
+      backgroundMusic.pause();
+      musicEnabled = false;
+      updateMusicToggle();
+    }
+  });
+
+  backgroundMusic.addEventListener('playing', () => {
+    musicEnabled = true;
+    updateMusicToggle();
+  });
+
+  backgroundMusic.addEventListener('pause', () => {
+    musicEnabled = false;
     updateMusicToggle();
   });
 
   updateMusicToggle();
   window.addEventListener('invitationready', () => {
-    if (musicEnabled) playBackgroundMusic();
+    playBackgroundMusic();
   }, { once: true });
 </script>
 
